@@ -4,10 +4,15 @@ with pkgs; mkShell {
     buildInputs = [ python36
                     python36Packages.selenium
                     python36Packages.csvkit
+                    python36Packages.flake8
                     fzf
+                    wget
                   ];
     shellHook = ''
-        export chromedriver_zip="chromedriver_linux64.zip"
+        alias ls='ls -GFh'
+        alias ll='ls -al'
+
+        export chromedriver_zip="chromedriver_mac64.zip"
         export chromedriver_path="./chromedriver"
 
         if [ ! -e $chromedriver_zip ]; then
@@ -29,6 +34,7 @@ with pkgs; mkShell {
 
         alias cdfzf="withfzf strcd"
         alias vimfzf="withfzf vim"
+        alias flake8="flake8 --ignore E124,E128,E201,E203,E241,W503"
 
         export -f withfzf
     '';
