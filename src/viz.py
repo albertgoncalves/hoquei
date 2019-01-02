@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from os.path import isfile
+
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 from utils import handle
+from utils import filename
 from utils import load_data
+from utils import seasons
 
 
 def unit_norm(arr):
@@ -17,10 +20,7 @@ def viz_path(handle):
     return "../viz/{}.png".format(handle)
 
 
-def main():
-    season = "regular"
-    year = 2016
-    season_handle = handle(season, year)
+def viz_season(season_handle):
     data = load_data(season_handle)
 
     for venue in ["home", "away"]:
@@ -32,6 +32,15 @@ def main():
     data.goal_diff.hist(bins=data.goal_diff.astype(str).nunique())
     plt.savefig(viz_path("{}_goal_diff".format(season_handle)))
     plt.close()
+
+
+def main():
+    season = seasons()[1]
+    year = 2013
+    season_handle = handle(season, year)
+
+    if isfile(filename(season_handle)):
+        viz_season(season_handle)
 
 
 if __name__ == "__main__":
