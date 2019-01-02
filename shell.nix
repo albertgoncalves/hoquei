@@ -1,6 +1,6 @@
 { pkgs ? import <nixpkgs> {} }:
 with pkgs; mkShell {
-    name = "Selenium";
+    name = "Python";
     buildInputs = [ python36
                     python36Packages.selenium
                     python36Packages.csvkit
