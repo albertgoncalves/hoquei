@@ -10,6 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
 from utils import filename
+from utils import handle
 from utils import seasons
 
 
@@ -66,8 +67,8 @@ def scrape_season(browser, year, season):
     return browser.find_element(By.XPATH, xpaths[-1]).text
 
 
-def write_season(data, year, season):
-    with open(filename(season, year), "w") as f:
+def write_season(data, csv_file):
+    with open(csv_file, "w") as f:
         f.write(data)
 
 
@@ -76,11 +77,12 @@ def main():
 
     for year in range(2009, 2019):
         for season in seasons():
-            if not isfile(filename(season, year)):
+            csv_file = filename(handle(season, year))
+            if not isfile(csv_file):
                 wait()
                 browser.get(url(year))
                 data = scrape_season(browser, year, season)
-                write_season(data, year, season)
+                write_season(data, csv_file)
 
     browser.close()
 

@@ -4,6 +4,9 @@ with pkgs; mkShell {
     buildInputs = [ python36
                     python36Packages.selenium
                     python36Packages.csvkit
+                    python36Packages.pandas
+                    python36Packages.matplotlib
+                    python36Packages.numpy
                     python36Packages.flake8
                     fzf
                     wget
