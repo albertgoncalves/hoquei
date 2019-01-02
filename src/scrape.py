@@ -2,35 +2,24 @@
 # -*- coding: utf-8 -*-
 
 from os import environ
+from os.path import isfile
 from time import sleep
 
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
-
-def click_xpath(browser, xpath):
-    browser.find_element(By.XPATH, xpath).click()
-    sleep(1)
+from utils import filename
+from utils import seasons
 
 
-def scroll_to_xpath(browser, xpath):
-    element = browser.find_element(By.XPATH, xpath)
-    sleep(1)
-    browser.execute_script("arguments[0].scrollIntoView();", element)
-    sleep(2)
-    for _ in range(2):
-        browser.find_element_by_css_selector("body").send_keys(Keys.UP)
-    sleep(1)
+def wait():
+    sleep(0.5)
 
 
 def url(year):
     stem = "https://www.hockey-reference.com/leagues/NHL_{}_games.html"
     return stem.format(year)
-
-
-def seasons():
-    return ["regular", "playoffs"]
 
 
 def season_xpaths(season):
@@ -52,6 +41,20 @@ def season_xpaths(season):
     return list(map(season_xpath, stems))
 
 
+def scroll_to_xpath(browser, xpath):
+    element = browser.find_element(By.XPATH, xpath)
+    wait()
+    browser.execute_script("arguments[0].scrollIntoView();", element)
+    for _ in range(2):
+        wait()
+        browser.find_element_by_css_selector("body").send_keys(Keys.UP)
+
+
+def click_xpath(browser, xpath):
+    browser.find_element(By.XPATH, xpath).click()
+    wait()
+
+
 def scrape_season(browser, year, season):
     xpaths = season_xpaths(season)
 
@@ -64,19 +67,20 @@ def scrape_season(browser, year, season):
 
 
 def write_season(data, year, season):
-    with open("data/{}_{}.csv".format(season, year), "w") as f:
+    with open(filename(season, year), "w") as f:
         f.write(data)
 
 
 def main():
     browser = Chrome(environ["chromedriver_path"])
 
-    for year in [2017, 2018]:
-        browser.get(url(year))
+    for year in range(2009, 2019):
         for season in seasons():
-            sleep(1)
-            data = scrape_season(browser, year, season)
-            write_season(data, year, season)
+            if not isfile(filename(season, year)):
+                wait()
+                browser.get(url(year))
+                data = scrape_season(browser, year, season)
+                write_season(data, year, season)
 
     browser.close()
 

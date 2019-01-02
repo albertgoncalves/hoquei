@@ -12,8 +12,8 @@ with pkgs; mkShell {
         alias ls='ls -GFh'
         alias ll='ls -al'
 
-        export chromedriver_zip="chromedriver_mac64.zip"
-        export chromedriver_path="./chromedriver"
+        chromedriver_zip="chromedriver_mac64.zip"
+        chromedriver_path="chromedriver"
 
         if [ ! -e $chromedriver_zip ]; then
             wget "https://chromedriver.storage.googleapis.com/2.45/$chromedriver_zip"
@@ -37,5 +37,6 @@ with pkgs; mkShell {
         alias flake8="flake8 --ignore E124,E128,E201,E203,E241,W503"
 
         export -f withfzf
+        export chromedriver_path=$(pwd)/$chromedriver_path
     '';
 }
