@@ -1,7 +1,5 @@
 *
 !src
-!viz
-!data
 !.gitignore
 !*.py
 !*.sh

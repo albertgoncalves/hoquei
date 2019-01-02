@@ -26,6 +26,12 @@ with pkgs; mkShell {
             unzip $chromedriver_zip -d ./
         fi
 
+        for d in data viz; do
+            if [ ! -e ./$d/ ]; then
+                mkdir $d
+            fi
+        done
+
         strcd() { cd "$(dirname $1)"; }
         withfzf() {
             local h
