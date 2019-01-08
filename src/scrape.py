@@ -15,7 +15,7 @@ from utils import seasons
 
 
 def wait():
-    sleep(0.5)
+    sleep(0.75)
 
 
 def url(year):
@@ -34,6 +34,7 @@ def season_xpaths(season):
 
     stems = \
         [ '//*[@id="all_games{}"]/div[1]/h2'
+        , 'body'
         , '//*[@id="all_games{}"]/div[1]/div/ul/li[1]/span'
         , '//*[@id="all_games{}"]/div[1]/div/ul/li[1]/div/ul/li[4]/button'
         , '//*[@id="csv_games{}"]'
@@ -46,14 +47,19 @@ def scroll_to_xpath(browser, xpath):
     element = browser.find_element(By.XPATH, xpath)
     wait()
     browser.execute_script("arguments[0].scrollIntoView();", element)
-    for _ in range(2):
+    for _ in range(3):
         wait()
         browser.find_element_by_css_selector("body").send_keys(Keys.UP)
 
 
 def click_xpath(browser, xpath):
-    browser.find_element(By.XPATH, xpath).click()
-    wait()
+    for _ in range(5):
+        try:
+            browser.find_element(By.XPATH, xpath).click()
+            break
+        except:
+            wait()
+            continue
 
 
 def scrape_season(browser, year, season):
