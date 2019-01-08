@@ -5,6 +5,9 @@ from os import environ
 from os.path import isfile
 from time import sleep
 
+from selenium.common.exceptions import ElementNotVisibleException
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -15,7 +18,7 @@ from utils import seasons
 
 
 def wait():
-    sleep(0.75)
+    sleep(1)
 
 
 def url(year):
@@ -53,11 +56,15 @@ def scroll_to_xpath(browser, xpath):
 
 
 def click_xpath(browser, xpath):
+    exceptions = ( WebDriverException
+                 , ElementNotVisibleException
+                 , NoSuchElementException
+                 )
     for _ in range(5):
         try:
             browser.find_element(By.XPATH, xpath).click()
             break
-        except:
+        except exceptions:
             wait()
             continue
 
