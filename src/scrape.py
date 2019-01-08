@@ -37,13 +37,14 @@ def season_xpaths(season):
 
     stems = \
         [ '//*[@id="all_games{}"]/div[1]/h2'
-        , 'body'
         , '//*[@id="all_games{}"]/div[1]/div/ul/li[1]/span'
         , '//*[@id="all_games{}"]/div[1]/div/ul/li[1]/div/ul/li[4]/button'
         , '//*[@id="csv_games{}"]'
         ]
 
-    return list(map(season_xpath, stems))
+    xpaths = list(map(season_xpath, stems))
+    xpaths.insert(1, "body")
+    return xpaths
 
 
 def scroll_to_xpath(browser, xpath):
@@ -56,17 +57,13 @@ def scroll_to_xpath(browser, xpath):
 
 
 def click_xpath(browser, xpath):
-    exceptions = ( WebDriverException
-                 , ElementNotVisibleException
-                 , NoSuchElementException
-                 )
     for _ in range(5):
         try:
             browser.find_element(By.XPATH, xpath).click()
             break
-        except exceptions:
+        except ( ElementNotVisibleException, NoSuchElementException
+               , WebDriverException):
             wait()
-            continue
 
 
 def scrape_season(browser, year, season):

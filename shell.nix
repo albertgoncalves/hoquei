@@ -12,10 +12,13 @@ with pkgs; mkShell {
                     wget
                   ];
     shellHook = ''
-        alias ls='ls -GFh'
-        alias ll='ls -al'
+        if [ $(uname -s) = "Darwin" ]; then
+            os="mac"
+        else
+            os="linux"
+        fi
 
-        chromedriver_zip="chromedriver_mac64.zip"
+        chromedriver_zip=chromedriver_"$os"64.zip
         chromedriver_path="chromedriver"
 
         if [ ! -e $chromedriver_zip ]; then
