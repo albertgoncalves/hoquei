@@ -5,16 +5,17 @@ import pandas as pd
 
 
 def columns():
-    return [ "date"
-           , "away_team"
-           , "away_goals"
-           , "home_team"
-           , "home_goals"
-           , "ot"
-           , "attendance"
-           , "game_length"
-           , "notes"
-           ]
+    return \
+        [ "date"
+        , "away_team"
+        , "away_goals"
+        , "home_team"
+        , "home_goals"
+        , "ot"
+        , "attendance"
+        , "game_length"
+        , "notes"
+        ]
 
 
 def filename(season_handle):
