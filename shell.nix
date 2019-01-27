@@ -14,6 +14,8 @@ with pkgs; mkShell {
     shellHook = ''
         if [ $(uname -s) = "Darwin" ]; then
             os="mac"
+            alias ls='ls --color=auto'
+            alias ll='ls -al'
         else
             os="linux"
         fi
@@ -47,6 +49,7 @@ with pkgs; mkShell {
         alias cdfzf="withfzf strcd"
         alias vimfzf="withfzf vim"
         alias flake8="flake8 --ignore E124,E128,E201,E203,E241,W503"
+        alias csvlook="csvlook --no-inference"
 
         export -f withfzf
         export chromedriver_path=$(pwd)/$chromedriver_path

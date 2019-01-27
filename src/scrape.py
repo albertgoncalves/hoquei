@@ -44,6 +44,7 @@ def season_xpaths(season):
 
     xpaths = list(map(season_xpath, stems))
     xpaths.insert(1, "body")
+
     return xpaths
 
 
