@@ -43,7 +43,7 @@ let html : string list = U.with_file Sys.argv.(1) Std.input_list
 let main () : unit =
     L.map rows html
     |> sift
-    |> L.map @@ (S.concat " ") @. scalpel
-    |> L.iter print_endline
+    |> L.map scalpel
+    |> L.iter (print_endline @. S.concat " ")
 
 let () = main ()
