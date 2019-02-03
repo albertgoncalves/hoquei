@@ -33,10 +33,12 @@ let scalpel (l : string) : string list =
             let y = ys |> L.rev |> E.implode in
             loop false (y::accu) ([], xs)
         | ys, x::xs ->
-            if target then
-                loop target accu (x::ys, xs)
-            else
-                loop target accu (ys, xs) in
+            let ys =
+                if target then
+                    x::ys
+                else
+                    ys in
+            loop target accu (ys, xs) in
     loop false [] ([], E.explode l)
 
 let pattern : R.regexp = R.regexp "<tr .*"
