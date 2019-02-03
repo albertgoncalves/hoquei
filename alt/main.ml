@@ -7,7 +7,7 @@ module X = Std
 
 let (@.) (f : ('b -> 'c)) (g : ('a -> 'b)) : ('a -> 'c) = fun x -> f @@ g x
 
-let finally (f: unit -> 'a) (resolve: unit -> 'b) =
+let finally (f: unit -> 'a) (resolve: unit -> 'b) : 'a =
     let f_exception =
         try f () with
               err ->
@@ -58,7 +58,7 @@ let sift (l : 'a option list) : 'a list =
         | None::xs -> loop accu xs in
     loop [] l
 
-let main () =
+let main () : unit =
     L.map rows html
     |> sift
     |> L.map @@ (S.concat " ") @. scalpel
