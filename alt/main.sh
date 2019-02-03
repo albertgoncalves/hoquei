@@ -7,5 +7,5 @@ if [ ! -e $fn ]; then
     curl https://www.hockey-reference.com/leagues/NHL_2019_games.html > $fn
 fi
 
-ocamlfind ocamlopt -package batteries -linkpkg main.ml -o main
-./main
+ocamlfind ocamlopt -package str,extlib -linkpkg main.ml -o main
+./main tmp.html

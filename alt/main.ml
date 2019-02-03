@@ -1,9 +1,9 @@
-module B = BatString
-module E = BatEnum
-module F = BatFile
+module E = ExtString.String
 module L = List
 module S = String
 module R = Str
+module Y = Sys
+module X = Std
 
 let (@.) (f : ('b -> 'c)) (g : ('a -> 'b)) : ('a -> 'c) = fun x -> f @@ g x
 
@@ -14,14 +14,14 @@ let scalpel (l : string) : string list =
         | ys, '>'::xs -> loop true accu (ys, xs)
         | [], '<'::xs -> loop false accu ([], xs)
         | ys, '<'::xs ->
-            let y = ys |> L.rev |> B.of_list in
+            let y = ys |> L.rev |> E.implode in
             loop false (y::accu) ([], xs)
         | ys, x::xs ->
             if target then
                 loop target accu (x::ys, xs)
             else
                 loop target accu (ys, xs) in
-    loop false [] ([], B.to_list l)
+    loop false [] ([], E.explode l)
 
 let pattern : R.regexp = R.regexp "<tr .*"
 
@@ -31,11 +31,23 @@ let rows (l : string) : string option =
     else
         None
 
-let html : string E.t = F.lines_of "tmp.html"
+let html : string list =
+    let channel = open_in Y.argv.(1) in
+    let l = X.input_list channel in
+    close_in channel;
+    l
+
+let sift (l : 'a option list) : 'a list =
+    let rec loop accu = function
+        | [] -> accu
+        | (Some x)::xs -> loop (x::accu) xs
+        | None::xs -> loop accu xs in
+    loop [] l
 
 let main () =
-    E.filter_map rows html
-    |> E.map @@ (S.concat " ") @. scalpel
-    |> E.iter print_endline
+    L.map rows html
+    |> sift
+    |> L.map @@ (S.concat " ") @. scalpel
+    |> L.iter print_endline
 
 let () = main ()
