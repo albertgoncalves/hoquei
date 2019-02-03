@@ -1,4 +1,3 @@
-module E = ExtString.String
 module L = List
 module S = String
 module U = Utils
@@ -13,7 +12,7 @@ let scalpel (l : string) : string list =
         | ys, '>'::xs -> loop true accu (ys, xs)
         | [], '<'::xs -> loop false accu ([], xs)
         | ys, '<'::xs ->
-            let y = ys |> L.rev |> E.implode in
+            let y = ys |> U.rev_implode in
             loop false (y::accu) ([], xs)
         | ys, x::xs ->
             let ys =
@@ -22,16 +21,20 @@ let scalpel (l : string) : string list =
                 else
                     ys in
             loop target accu (ys, xs) in
-    loop false [] ([], E.explode l)
+    loop false [] ([], U.explode l)
 
-let rows : (string list -> string list list) =
-    let pattern = Str.regexp "<tr .*" in
+let extract : (string list -> string list list) =
+    let pattern = Str.regexp "^<tr[ ]*><th scope=\"row\"" in
+    let row : (string -> bool) = function
+        | "" -> false
+        | x -> Str.string_match pattern x 0 in
     let rec loop (accu : string list list)
         : (string list -> string list list) = function
         | [] -> accu
         | x::xs ->
-            if Str.string_match pattern x 0 then
-                loop ((scalpel x)::accu) xs
+            if row x then
+                let y = scalpel x in
+                loop (y::accu) xs
             else
                 loop accu xs in
     loop []
@@ -40,7 +43,7 @@ let html : string list = U.with_file Sys.argv.(1) Std.input_list
 
 let main () : unit =
     html
-    |> rows
+    |> extract
     |> L.iter (print_endline @. S.concat " ")
 
 let () = main ()
