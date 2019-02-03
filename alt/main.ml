@@ -7,6 +7,21 @@ module X = Std
 
 let (@.) (f : ('b -> 'c)) (g : ('a -> 'b)) : ('a -> 'c) = fun x -> f @@ g x
 
+let finally (f: unit -> 'a) (resolve: unit -> 'b) =
+    let f_exception =
+        try f () with
+              err ->
+                resolve ();
+                raise err in
+    resolve ();
+    f_exception
+
+let with_file (path : string) (f: in_channel -> 'a) : 'a =
+    let channel = open_in path in
+    finally
+        (fun () -> f channel)
+        (fun () -> close_in channel)
+
 let scalpel (l : string) : string list =
     let rec loop (target : bool) (accu : string list)
         : ((char list * char list) -> string list) = function
@@ -31,11 +46,7 @@ let rows (l : string) : string option =
     else
         None
 
-let html : string list =
-    let channel = open_in Y.argv.(1) in
-    let l = X.input_list channel in
-    close_in channel;
-    l
+let html : string list = with_file Y.argv.(1) X.input_list
 
 let sift (l : 'a option list) : 'a list =
     let rec loop accu = function
