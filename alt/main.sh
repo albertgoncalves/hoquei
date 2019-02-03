@@ -2,7 +2,7 @@
 
 set -e
 
-ocamlfind ocamlopt -package extlib,str -linkpkg main.ml -o main
+ocamlfind ocamlopt -package extlib,str utils.ml -linkpkg main.ml -o main
 
 fn="index.html"
 if [ ! -e $fn ]; then

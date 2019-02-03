@@ -1,26 +1,9 @@
 module E = ExtString.String
 module L = List
 module S = String
-module R = Str
-module Y = Sys
-module X = Std
+module U = Utils
 
-let (@.) (f : ('b -> 'c)) (g : ('a -> 'b)) : ('a -> 'c) = fun x -> f @@ g x
-
-let finally (f: unit -> 'a) (resolve: unit -> 'b) : 'a =
-    let f_exception =
-        try f () with
-              err ->
-                resolve ();
-                raise err in
-    resolve ();
-    f_exception
-
-let with_file (path : string) (f: in_channel -> 'a) : 'a =
-    let channel = open_in path in
-    finally
-        (fun () -> f channel)
-        (fun () -> close_in channel)
+let (@.) = U.(@.)
 
 (* NOTE: This seems to work -- but, is there a better way to do this? *)
 let scalpel (l : string) : string list =
@@ -41,15 +24,12 @@ let scalpel (l : string) : string list =
             loop target accu (ys, xs) in
     loop false [] ([], E.explode l)
 
-let pattern : R.regexp = R.regexp "<tr .*"
-
 let rows (l : string) : string option =
-    if R.string_match pattern l 0 then
+    let pattern = Str.regexp "<tr .*" in
+    if Str.string_match pattern l 0 then
         Some l
     else
         None
-
-let html : string list = with_file Y.argv.(1) X.input_list
 
 let sift (l : 'a option list) : 'a list =
     let rec loop accu = function
@@ -57,6 +37,8 @@ let sift (l : 'a option list) : 'a list =
         | (Some x)::xs -> loop (x::accu) xs
         | None::xs -> loop accu xs in
     loop [] l
+
+let html : string list = U.with_file Sys.argv.(1) Std.input_list
 
 let main () : unit =
     L.map rows html
