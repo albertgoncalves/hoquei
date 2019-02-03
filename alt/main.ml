@@ -22,6 +22,7 @@ let with_file (path : string) (f: in_channel -> 'a) : 'a =
         (fun () -> f channel)
         (fun () -> close_in channel)
 
+(* NOTE: This seems to work -- but, is there a better way to do this? *)
 let scalpel (l : string) : string list =
     let rec loop (target : bool) (accu : string list)
         : ((char list * char list) -> string list) = function
