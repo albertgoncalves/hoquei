@@ -32,7 +32,7 @@ let rows (l : string) : string option =
         None
 
 let sift (l : 'a option list) : 'a list =
-    let rec loop accu = function
+    let rec loop (accu : 'a list) : ('a option list -> 'a list) = function
         | [] -> accu
         | (Some x)::xs -> loop (x::accu) xs
         | None::xs -> loop accu xs in
