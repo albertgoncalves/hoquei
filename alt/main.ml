@@ -12,7 +12,7 @@ let scalpel (l : string) : string list =
         | ys, '>'::xs -> loop true accu (ys, xs)
         | [], '<'::xs -> loop false accu ([], xs)
         | ys, '<'::xs ->
-            let y = ys |> U.rev_implode in
+            let y = U.rev_implode ys in
             loop false (y::accu) ([], xs)
         | ys, x::xs ->
             let ys =
