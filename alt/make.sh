@@ -2,12 +2,13 @@
 
 set -e
 
-ocamlfind ocamlopt -package extlib,str utils.ml -linkpkg main.ml -o main
-
+ml="scrape"
 fn="index.html"
+
+ocamlfind ocamlopt -package extlib,str utils.ml -linkpkg $ml.ml -o $ml
 
 if [ ! -e $fn ]; then
     curl https://www.hockey-reference.com/leagues/NHL_2019_games.html > $fn
 fi
 
-./main $fn
+./$ml $fn
