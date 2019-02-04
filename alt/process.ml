@@ -6,15 +6,7 @@ type past_game =
     ; home : string
     ; away_goals : int
     ; home_goals : int
-    }
-
-type past_game_ot =
-    { date : string
-    ; away : string
-    ; home : string
-    ; away_goals : int
-    ; home_goals : int
-    ; ot : string
+    ; ot : string option
     }
 
 type future_game =
@@ -23,60 +15,64 @@ type future_game =
     ; home : string
     }
 
-type split_games = past_game list * past_game_ot list * future_game list
+type split_games =
+    { past_games : past_game list
+    ; future_games : future_game list
+    }
 
 exception InputValue of string
 
 let string_to_goal (goals : string) (date : string) : int =
     try int_of_string goals with _ ->
         let (template : ('a, unit, string) format) =
-            "unable to convert '%s' to <int>, see rows for date '%s'" in
+            "unable to convert '%s' to <int>, check games with date '%s'" in
         let (err : string) = P.sprintf template goals date in
         raise (InputValue err)
 
-let split : (string list list -> split_games) =
-    let rec loop
-            (past : past_game list)
-            (past_ot : past_game_ot list)
-            (future : future_game list)
-        : (string list list -> split_games) = function
-        | [_; _; hg; h; ag; a; d]::xs ->
-            let (x : past_game) =
-                { date = d
-                ; away = a
-                ; home = h
-                ; away_goals = string_to_goal ag d
-                ; home_goals = string_to_goal hg d
-                } in
-            loop (x::past) past_ot future xs
-        | [_; _; o; hg; h; ag; a; d]::xs ->
-            let (x : past_game_ot) =
-                { date = d
-                ; away = a
-                ; home = h
-                ; away_goals = string_to_goal ag d
-                ; home_goals = string_to_goal hg d
-                ; ot = o
-                } in
-            loop past (x::past_ot) future xs
-        | [h; a; d]::xs ->
-            let (x : future_game) =
-                { date = d
-                ; away = a
-                ; home = h
-                } in
-            loop past past_ot (x::future) xs
-        | _::xs -> loop past past_ot future xs
-        | [] -> (past, past_ot, future) in
-    loop [] [] []
+let past_record ~date ~away ~home ~away_goals ~home_goals ~ot : past_game =
+    { date = date
+    ; away = away
+    ; home = home
+    ; away_goals = string_to_goal away_goals date
+    ; home_goals = string_to_goal home_goals date
+    ; ot = ot
+    }
 
-let test_future =
+let future_record ~date ~away ~home : future_game =
+    {date = date; away = away; home = home}
+
+let games_record ~past_games ~future_games : split_games =
+    { past_games = past_games
+    ; future_games = future_games
+    }
+
+let split : (string list list -> split_games) =
+    let rec loop past_games future_games
+        : (string list list -> split_games) = function
+        | [_; _; home_goals; home; away_goals; away; date]::xs ->
+            let x =
+                past_record
+                    ~date ~away ~home ~away_goals ~home_goals ~ot:None in
+            loop (x::past_games) future_games xs
+        | [_; _; ot; home_goals; home; away_goals; away; date]::xs ->
+            let x =
+                past_record
+                    ~date ~away ~home ~away_goals ~home_goals ~ot:(Some ot) in
+            loop (x::past_games) future_games xs
+        | [home; away; date]::xs ->
+            let x = future_record ~date ~away ~home in
+            loop past_games (x::future_games) xs
+        | _::xs -> loop past_games future_games xs
+        | [] -> games_record ~past_games ~future_games in
+    loop [] []
+
+let future_example =
     [ "Carolina Hurricanes"
     ; "Calgary Flames"
     ; "2019-02-03"
     ]
 
-let test_past =
+let past_example =
     [ "2:30"
     ; "15,321"
     ; "9"
@@ -86,7 +82,7 @@ let test_past =
     ; "2019-02-02"
     ]
 
-let test_past_ot =
+let past_ot_example =
     [ "2:30"
     ; "17,015"
     ; "SO"
@@ -97,5 +93,5 @@ let test_past_ot =
     ; "2018-10-10"
     ]
 
-let test () : split_games =
-    split [[]; test_past; test_past_ot; test_future]
+let example () : split_games =
+    split [[]; past_example; past_ot_example; future_example]
