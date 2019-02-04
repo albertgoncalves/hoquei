@@ -6,3 +6,4 @@
 !shell.nix
 !alt
 !*.ml
+!.ocp-indent
