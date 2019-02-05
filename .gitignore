@@ -8,3 +8,4 @@
 !*.ml
 !.ocp-indent
 !test
+alt/src/test/test
