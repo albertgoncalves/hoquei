@@ -4,11 +4,13 @@ set -e
 
 cd ../
 
-ocamlfind ocamlc -c data.ml
+for f in data; do
+    ocamlfind ocamlc -c $f.ml
+done
 
 ocamlfind ocamlopt \
     -package oUnit data.ml \
-    -linkpkg -g process.ml test/test.ml \
+    -linkpkg -g convert.ml test/test.ml \
     -o test/test
 
 cd test/
