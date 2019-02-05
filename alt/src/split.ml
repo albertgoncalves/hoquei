@@ -1,14 +1,6 @@
 open Data
 
 module C = Convert
-module P = Printf
-
-let string_to_goal (goals : string) (date : string) : int =
-    try int_of_string goals with _ ->
-        let (template : ('a, unit, string) format) =
-            "unable to convert '%s' to <int>, check games with date '%s'" in
-        let (err : string) = P.sprintf template goals date in
-        raise (InputValue err)
 
 let split : (string list list -> split_games) =
     let rec loop past_games future_games
