@@ -14,3 +14,4 @@ ocamlfind ocamlopt \
 cd test/
 
 ./test
+rm oUnit-suite*
