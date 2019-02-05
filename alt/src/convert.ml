@@ -19,7 +19,10 @@ let past_record ~date ~away ~home ~away_goals ~home_goals ~ot : past_game =
     }
 
 let future_record ~date ~away ~home : future_game =
-    {date = date; away = away; home = home}
+    { date = date
+    ; away = away
+    ; home = home
+    }
 
 let games_record ~past_games ~future_games : split_games =
     { past_games = past_games
