@@ -23,27 +23,18 @@ let scalpel (l : string) : string list =
             loop target accu (ys, xs) in
     loop false [] ([], U.explode l)
 
-let extract : (string list -> string list list) =
-    let pattern = Str.regexp "^<tr[ ]*><th scope=\"row\"" in
-    let row : (string -> bool) = function
-        | "" -> false
-        | x -> Str.string_match pattern x 0 in
-    let rec loop (accu : string list list)
-        : (string list -> string list list) = function
-        | [] -> accu
-        | x::xs ->
-            if row x then
-                let y = scalpel x in
-                loop (y::accu) xs
-            else
-                loop accu xs in
-    loop []
+let pattern = Str.regexp "^<tr[ ]*><th scope=\"row\""
+
+let row (pattern : Str.regexp) : (string -> bool) = function
+    | "" -> false
+    | x -> Str.string_match pattern x 0
 
 let html : string list = U.with_file Sys.argv.(1) Std.input_list
 
 let main () : unit =
     html
-    |> extract
-    |> L.iter (print_endline @. S.concat " ")
+    |> L.filter @@ row pattern
+    |> L.map scalpel
+    |> L.iter @@ print_endline @. S.concat " "
 
 let () = main ()
