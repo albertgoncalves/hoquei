@@ -6,12 +6,8 @@ d="../test"
 
 cd ../src/
 
-for f in data; do
-    ocamlfind ocamlc -c $f.ml
-done
-
 ocamlfind ocamlopt \
-    -package oUnit data.ml \
+    -package oUnit data.ml utils.ml \
     -linkpkg -g convert.ml $d/test.ml \
     -o $d/test
 
