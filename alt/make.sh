@@ -7,7 +7,10 @@ html="index.html"
 
 cd src/
 
-ocamlfind ocamlopt -package extlib,str -linkpkg utils.ml $f.ml -o $f
+ocamlfind ocamlopt \
+    -package extlib,str \
+    -linkpkg -g utils.ml $f.ml \
+    -o $f
 
 cd ../
 
