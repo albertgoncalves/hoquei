@@ -9,20 +9,23 @@ let string_to_goal (goals : string) (date : string) : int =
         let (err : string) = P.sprintf template goals date in
         raise (InputValue err)
 
-let past_record ~date ~away ~home ~away_goals ~home_goals ~ot : past_game =
+let game_record ~date ~away ~home ~result : game =
     { date = date
     ; away = away
     ; home = home
-    ; away_goals = string_to_goal away_goals date
-    ; home_goals = string_to_goal home_goals date
-    ; ot = ot
+    ; result = result
     }
 
-let future_record ~date ~away ~home : future_game =
-    { date = date
-    ; away = away
-    ; home = home
-    }
+let past_record ~date ~away ~home ~away_goals ~home_goals ~ot : game =
+    let result =
+        { away = string_to_goal away_goals date
+        ; home = string_to_goal home_goals date
+        ; ot = ot
+        } in
+    game_record ~date ~away ~home ~result:(Some result)
+
+let future_record ~date ~away ~home : game =
+    game_record ~date ~away ~home ~result:None
 
 let games_record ~past_games ~future_games : split_games =
     { past_games = past_games

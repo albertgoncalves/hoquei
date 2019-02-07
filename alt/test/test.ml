@@ -12,7 +12,7 @@ let test_goal_exn test_ctxt =
 
 let suite =
     "suite">:::
-        [ "test string-to-goal exception">:: test_goal_exn
-        ]
+    [ "test string-to-goal exception">:: test_goal_exn
+    ]
 
 let () = run_test_tt_main suite

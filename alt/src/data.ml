@@ -1,21 +1,19 @@
-type past_game =
-    { date : string
-    ; away : string
-    ; home : string
-    ; away_goals : int
-    ; home_goals : int
+type result =
+    { away : int
+    ; home : int
     ; ot : string option
     }
 
-type future_game =
+type game =
     { date : string
     ; away : string
     ; home : string
+    ; result : result option
     }
 
 type split_games =
-    { past_games : past_game list
-    ; future_games : future_game list
+    { past_games : game list
+    ; future_games : game list
     }
 
 exception InputValue of string
