@@ -1,7 +1,7 @@
 open OUnit2
 
-module C = Convert
 module D = Data
+module R = Record
 module S = Scrape
 
 let test_scalpel test_ctxt =
@@ -23,7 +23,7 @@ let test_goal_exn test_ctxt =
         "unable to convert 'a' to <int>, check games with date '2018-10-04'" in
     assert_raises
         (D.InputValue err)
-        (fun () -> C.string_to_goal "a" "2018-10-04")
+        (fun () -> R.string_to_goal "a" "2018-10-04")
 
 let test_future_label test_ctxt =
     let record : D.game =
@@ -37,7 +37,7 @@ let test_future_label test_ctxt =
         ; "Calgary Flames"
         ; "2019-02-03"
         ] in
-    assert_equal (Some record) (C.label test_case)
+    assert_equal (Some record) (R.label test_case)
 
 let test_past_label test_ctxt =
     let result : D.result =
@@ -60,7 +60,7 @@ let test_past_label test_ctxt =
         ; "Anaheim Ducks"
         ; "2019-02-02"
         ] in
-    assert_equal (Some record) (C.label test_case)
+    assert_equal (Some record) (R.label test_case)
 
 let test_past_ot_label test_ctxt =
     let result : D.result =
@@ -84,7 +84,7 @@ let test_past_ot_label test_ctxt =
         ; "Arizona Coyotes"
         ; "2018-10-10"
         ] in
-    assert_equal (Some record) (C.label test_case)
+    assert_equal (Some record) (R.label test_case)
 
 let suite =
     "suite">:::
