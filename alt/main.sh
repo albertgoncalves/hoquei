@@ -2,6 +2,9 @@
 
 set -e
 
+echo '$ ocp-indent -i ...'
+for ml in */*.ml; do echo $ml; ocp-indent -i $ml; done
+
 cd test/
 sh test.sh
 cd ../

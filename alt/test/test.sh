@@ -13,5 +13,6 @@ ocamlfind ocamlopt \
 
 cd $d/
 
-eval ./test
+echo ""
+./test
 rm oUnit-suite*

@@ -3,6 +3,13 @@ open OUnit2
 module D = Data
 module R = Record
 module S = Scrape
+module U = Utils
+
+let test_explode test_ctxt =
+    assert_equal ['a'; 'b'; 'c'; 'd'] (U.explode "abcd")
+
+let test_rev_implode test_ctxt =
+    assert_equal "abcd" (U.rev_implode ['d'; 'c'; 'b'; 'a'])
 
 let test_scalpel test_ctxt =
     let test_case =
@@ -88,7 +95,9 @@ let test_past_ot_label test_ctxt =
 
 let suite =
     "suite">:::
-    [ "test scalpel">:: test_scalpel
+    [ "test explode">:: test_explode
+    ; "test rev implode">:: test_rev_implode
+    ; "test scalpel">:: test_scalpel
     ; "test string-to-goal exception">:: test_goal_exn
     ; "test future label">:: test_future_label
     ; "test past label">:: test_past_label
