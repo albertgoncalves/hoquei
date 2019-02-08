@@ -11,9 +11,16 @@ let test_explode test_ctxt =
 let test_rev_implode test_ctxt =
     assert_equal "abcd" (U.rev_implode ['d'; 'c'; 'b'; 'a'])
 
+let excerpt =
+    "<tr ><th scope=\"row\" class=\"left \" data-stat=\"date_game\" csk=\"201810030SJS\" ><a href=\"/boxscores/201810030SJS.html\">2018-10-03</a></th><td class=\"left \" data-stat=\"visitor_team_name\" csk=\"ANA.201810030SJS\" ><a href=\"/teams/ANA/2019.html\">Anaheim Ducks</a></td><td class=\"right \" data-stat=\"visitor_goals\" >5</td><td class=\"left \" data-stat=\"home_team_name\" csk=\"SJS.201810030SJS\" ><a href=\"/teams/SJS/2019.html\">San Jose Sharks</a></td><td class=\"right \" data-stat=\"home_goals\" >2</td><td class=\"center iz\" data-stat=\"overtimes\" csk=\"0\" ></td><td class=\"right \" data-stat=\"attendance\" >17,562</td><td class=\"right \" data-stat=\"game_duration\" >2:25</td><td class=\"left iz\" data-stat=\"game_remarks\" ></td></tr>"
+
+let test_row_true test_ctxt =
+    assert_equal true (S.row S.pattern excerpt)
+
+let test_row_false test_ctxt =
+    assert_equal false (S.row S.pattern "<tr></tr>")
+
 let test_scalpel test_ctxt =
-    let test_case =
-        "<tr ><th scope=\"row\" class=\"left \" data-stat=\"date_game\" csk=\"201810030SJS\" ><a href=\"/boxscores/201810030SJS.html\">2018-10-03</a></th><td class=\"left \" data-stat=\"visitor_team_name\" csk=\"ANA.201810030SJS\" ><a href=\"/teams/ANA/2019.html\">Anaheim Ducks</a></td><td class=\"right \" data-stat=\"visitor_goals\" >5</td><td class=\"left \" data-stat=\"home_team_name\" csk=\"SJS.201810030SJS\" ><a href=\"/teams/SJS/2019.html\">San Jose Sharks</a></td><td class=\"right \" data-stat=\"home_goals\" >2</td><td class=\"center iz\" data-stat=\"overtimes\" csk=\"0\" ></td><td class=\"right \" data-stat=\"attendance\" >17,562</td><td class=\"right \" data-stat=\"game_duration\" >2:25</td><td class=\"left iz\" data-stat=\"game_remarks\" ></td></tr>" in
     let result =
         [ "2:25"
         ; "17,562"
@@ -23,7 +30,7 @@ let test_scalpel test_ctxt =
         ; "Anaheim Ducks"
         ; "2018-10-03"
         ] in
-    assert_equal result (S.scalpel test_case)
+    assert_equal result (S.scalpel excerpt)
 
 let test_goal_exn test_ctxt =
     let err =
@@ -97,6 +104,8 @@ let suite =
     "suite">:::
     [ "test explode">:: test_explode
     ; "test rev implode">:: test_rev_implode
+    ; "test row true">:: test_row_true
+    ; "test row false">:: test_row_false
     ; "test scalpel">:: test_scalpel
     ; "test string-to-goal exception">:: test_goal_exn
     ; "test future label">:: test_future_label
