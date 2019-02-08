@@ -16,18 +16,25 @@ let game_record ~date ~away ~home ~result : game =
     ; result = result
     }
 
-let past_record ~date ~away ~home ~away_goals ~home_goals ~ot : game =
-    let result =
-        { away = string_to_goal away_goals date
-        ; home = string_to_goal home_goals date
+let result_record ~ot ~away ~home ~date : result option =
+    Some
+        { away = string_to_goal away date
+        ; home = string_to_goal home date
         ; ot = ot
-        } in
-    game_record ~date ~away ~home ~result:(Some result)
+        }
 
-let future_record ~date ~away ~home : game =
-    game_record ~date ~away ~home ~result:None
-
-let games_record ~past_games ~future_games : split_games =
-    { past_games = past_games
-    ; future_games = future_games
-    }
+let label : (string list -> game option) = function
+    | [_; _; home_goals; home; away_goals; away; date] ->
+        let ot = None in
+        let result =
+            result_record ~ot ~away:away_goals ~home:home_goals ~date in
+        Some (game_record ~date ~away ~home ~result)
+    | [_; _; ot; home_goals; home; away_goals; away; date] ->
+        let ot = Some ot in
+        let result =
+            result_record ~ot ~away:away_goals ~home:home_goals ~date in
+        Some (game_record ~date ~away ~home ~result)
+    | [home; away; date] ->
+        let result = None in
+        Some (game_record ~date ~away ~home ~result)
+    | _ -> None

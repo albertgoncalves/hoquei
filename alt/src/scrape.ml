@@ -2,8 +2,6 @@ module L = List
 module S = String
 module U = Utils
 
-let (@.) = U.(@.)
-
 (* NOTE: This seems to work -- but, is there a better way to do this? *)
 let scalpel (l : string) : string list =
     let rec loop (target : bool) (accu : string list)
@@ -28,13 +26,3 @@ let pattern = Str.regexp "^<tr[ ]*><th scope=\"row\""
 let row (pattern : Str.regexp) : (string -> bool) = function
     | "" -> false
     | x -> Str.string_match pattern x 0
-
-let html : string list = U.with_file Sys.argv.(1) Std.input_list
-
-let main () : unit =
-    html
-    |> L.filter @@ row pattern
-    |> L.map scalpel
-    |> L.iter @@ print_endline @. S.concat " "
-
-let () = main ()

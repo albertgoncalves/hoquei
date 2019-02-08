@@ -7,11 +7,11 @@ d="../test"
 cd ../src/
 
 ocamlfind ocamlopt \
-    -package oUnit data.ml utils.ml \
-    -linkpkg -g convert.ml $d/test.ml \
+    -package extlib,oUnit,str data.ml utils.ml \
+    -linkpkg -g scrape.ml convert.ml $d/test.ml \
     -o $d/test
 
 cd $d/
 
-./test
+eval ./test
 rm oUnit-suite*
