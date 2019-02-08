@@ -25,16 +25,14 @@ let result_record ~ot ~away ~home ~date : result option =
 
 let label : (string list -> game option) = function
     | [_; _; home_goals; home; away_goals; away; date] ->
-        let ot = None in
         let result =
-            result_record ~ot ~away:away_goals ~home:home_goals ~date in
+            result_record ~ot:None ~away:away_goals ~home:home_goals ~date in
         Some (game_record ~date ~away ~home ~result)
     | [_; _; ot; home_goals; home; away_goals; away; date] ->
-        let ot = Some ot in
         let result =
-            result_record ~ot ~away:away_goals ~home:home_goals ~date in
+            result_record
+                ~ot:(Some ot) ~away:away_goals ~home:home_goals ~date in
         Some (game_record ~date ~away ~home ~result)
     | [home; away; date] ->
-        let result = None in
-        Some (game_record ~date ~away ~home ~result)
+        Some (game_record ~date ~away ~home ~result:None)
     | _ -> None
