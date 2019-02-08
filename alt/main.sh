@@ -13,12 +13,10 @@ f="main"
 html="index.html"
 
 cd src/
-
 ocamlfind ocamlopt \
     -package extlib,str \
     -linkpkg -g utils.ml scrape.ml $f.ml \
     -o $f
-
 cd ../
 
 if [ ! -e $html ]; then
