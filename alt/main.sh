@@ -24,5 +24,5 @@ if [ ! -e $html ]; then
 fi
 
 main="./src/$f $html | tail"
-printf '\n%s\n' "$main"
+printf '\n$ %s\n' "$main"
 eval $main
