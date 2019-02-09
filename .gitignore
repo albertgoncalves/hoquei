@@ -9,3 +9,5 @@
 !.ocp-indent
 !test
 alt/test/test
+!hs
+!*.hs
