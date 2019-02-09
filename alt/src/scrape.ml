@@ -4,13 +4,13 @@ module U = Utils
 
 let scalpel (l : string) : string list =
     let p = Str.regexp ">\\([a-zA-Z0-9 :,-]+?\\)<" in
-    let forward p l n =
+    let forward p l n : (int * string) option =
         let lambda () =
             let n = Str.search_forward p l n in
             let s = Str.matched_group 1 l in
             Some (n, s) in
         try lambda () with Not_found -> None in
-    let rec loop p l accu = function
+    let rec loop p l accu : ((int * string) option -> string list) = function
         | Some (n, s) ->
             let maybe_accu = function
                 | "" -> accu
