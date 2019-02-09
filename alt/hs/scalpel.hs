@@ -9,7 +9,7 @@ scalpel = do
     skip '<'
     return text
   where
-    skip = skipMany1 . satisfy . (\x -> (== x))
+    skip = skipMany1 . satisfy . (==)
 
 extract :: [(String, a)] -> [String]
 extract [(s, _)] = [s]
