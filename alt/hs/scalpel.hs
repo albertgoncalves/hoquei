@@ -4,10 +4,12 @@ import Text.ParserCombinators.ReadP
 
 scalpel :: ReadP String
 scalpel = do
-    skipMany1 $ satisfy (== '>')
+    skip '>'
     text <- many1 $ satisfy (`notElem` "><")
-    skipMany1 $ satisfy (== '<')
+    skip '<'
     return text
+  where
+    skip = skipMany1 . satisfy . (\x -> (== x))
 
 extract :: [(String, a)] -> [String]
 extract [(s, _)] = [s]
