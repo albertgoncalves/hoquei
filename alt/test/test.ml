@@ -5,20 +5,14 @@ module R = Record
 module S = Scrape
 module U = Utils
 
-let test_explode test_ctxt =
-    assert_equal ['a'; 'b'; 'c'; 'd'] (U.explode "abcd")
-
-let test_rev_implode test_ctxt =
-    assert_equal "abcd" (U.rev_implode ['d'; 'c'; 'b'; 'a'])
-
 let excerpt =
     "<tr ><th scope=\"row\" class=\"left \" data-stat=\"date_game\" csk=\"201810030SJS\" ><a href=\"/boxscores/201810030SJS.html\">2018-10-03</a></th><td class=\"left \" data-stat=\"visitor_team_name\" csk=\"ANA.201810030SJS\" ><a href=\"/teams/ANA/2019.html\">Anaheim Ducks</a></td><td class=\"right \" data-stat=\"visitor_goals\" >5</td><td class=\"left \" data-stat=\"home_team_name\" csk=\"SJS.201810030SJS\" ><a href=\"/teams/SJS/2019.html\">San Jose Sharks</a></td><td class=\"right \" data-stat=\"home_goals\" >2</td><td class=\"center iz\" data-stat=\"overtimes\" csk=\"0\" ></td><td class=\"right \" data-stat=\"attendance\" >17,562</td><td class=\"right \" data-stat=\"game_duration\" >2:25</td><td class=\"left iz\" data-stat=\"game_remarks\" ></td></tr>"
 
 let test_row_true test_ctxt =
-    assert_equal true (S.row S.pattern excerpt)
+    assert_equal true (S.row excerpt)
 
 let test_row_false test_ctxt =
-    assert_equal false (S.row S.pattern "<tr></tr>")
+    assert_equal false (S.row "<tr></tr>")
 
 let test_scalpel test_ctxt =
     let result =
@@ -102,15 +96,13 @@ let test_past_ot_label test_ctxt =
 
 let suite =
     "suite">:::
-    [ "test explode">:: test_explode
-    ; "test rev implode">:: test_rev_implode
-    ; "test row true">:: test_row_true
-    ; "test row false">:: test_row_false
-    ; "test scalpel">:: test_scalpel
-    ; "test string-to-goal exception">:: test_goal_exn
-    ; "test future label">:: test_future_label
-    ; "test past label">:: test_past_label
-    ; "test past ot label">:: test_past_ot_label
+    [ "row true">:: test_row_true
+    ; "row false">:: test_row_false
+    ; "scalpel">:: test_scalpel
+    ; "string to goal">:: test_goal_exn
+    ; "future label">:: test_future_label
+    ; "past label">:: test_past_label
+    ; "past ot label">:: test_past_ot_label
     ]
 
 let () = run_test_tt_main suite
