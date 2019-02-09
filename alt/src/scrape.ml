@@ -3,7 +3,7 @@ module S = String
 module U = Utils
 
 let scalpel (l : string) : string list =
-    let p = Str.regexp ">\\([a-zA-Z0-9 :,-]+?\\)<" in
+    let p = Str.regexp ">\\([^><]+?\\)<" in
     let forward p l n : (int * string) option =
         let lambda () =
             let n = Str.search_forward p l n in
