@@ -86,5 +86,7 @@ bundle = function(data, header, teams_list) {
 if (sys.nframe() == 0) {
     source(teamsfile())
     data = read_csv("output.csv")
-    bundle(data, "defense", teams_list)
+    for (header in c("offense", "defense")) {
+        bundle(data, header, teams_list)
+    }
 }
