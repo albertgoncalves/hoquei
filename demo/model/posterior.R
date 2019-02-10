@@ -44,17 +44,17 @@ group = function(data, headers_list, group_functions) {
     return(data)
 }
 
-group_functions = function(data) {
-    return(c( team=unique(data$team)
-            , mean=mean(data$posterior)
-            , min=min(data$posterior)
-            , max=max(data$posterior)
-            , lower=quantile(data$posterior, .05)
-            , upper=quantile(data$posterior, .95)
-            ))
-}
-
 error_plot = function(data, title) {
+    group_functions = function(data) {
+        return(c( team=unique(data$team)
+                , mean=mean(data$posterior)
+                , min=min(data$posterior)
+                , max=max(data$posterior)
+                , lower=quantile(data$posterior, .05)
+                , upper=quantile(data$posterior, .95)
+                ))
+    }
+
     center = mean(data$posterior)
     data = group(data, list(data$team), group_functions)
     n = NROW(data)
@@ -69,13 +69,14 @@ error_plot = function(data, title) {
         , xlim=c(min(data$min), max(data$max))
         , main=title
         )
-    axis(2, at=1:31, tck=1, lty=2, labels=NA, col="lightgray")
+    gray = adjustcolor("gray", 0.45)
+    axis(2, at=1:31, tck=1, lty=2, labels=NA, col=gray)
     axis(side=2, at=1:n, labels=data$team, las=2)
-    abline(v=center, lty=1, col="lightgray")
+    abline(v=center, lty=1, col=gray)
     segments(y0=1:31, x0=data$lower, x1=data$upper)
 }
 
-bundle = function(data, header) {
+bundle = function(data, header, teams_list) {
     columns = sprintf("%s.", header)
     title = sprintf("%s Coef.", toTitleCase(header))
     data = stack_columns(extract_with_labels(data, teams_list, columns))
@@ -85,5 +86,5 @@ bundle = function(data, header) {
 if (sys.nframe() == 0) {
     source(teamsfile())
     data = read_csv("output.csv")
-    bundle(data, "offense")
+    bundle(data, "defense", teams_list)
 }
