@@ -25,4 +25,7 @@ rm $tmp
 
 cat $report
 
+Rscript posterior.R
+open Rplots.pdf
+
 cd ../

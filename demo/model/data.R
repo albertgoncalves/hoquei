@@ -17,13 +17,13 @@ export_stan_data = function(data, datafile, teamsfile) {
 
     n_teams = length(teams_list)
     n_games = NROW(data)
-    n_train = as.integer(n_games * 0.9)
+    n_train = as.integer(n_games * 0.5)
     home = teams_to_indices(teams_list, data$home)
     away = teams_to_indices(teams_list, data$away)
     home_goals = data$home_goals
     away_goals = data$away_goals
 
-    items = c(  "n_teams"
+    items = c( "n_teams"
              , "n_games"
              , "n_train"
              , "home"

@@ -84,7 +84,6 @@ bundle = function(data, header) {
 
 if (sys.nframe() == 0) {
     source(teamsfile())
-
     data = read_csv("output.csv")
     bundle(data, "offense")
 }
