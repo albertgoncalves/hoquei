@@ -11,3 +11,12 @@
 alt/test/test
 !hs
 !*.hs
+!demo
+!*.R
+!.stan
+!data
+!model
+*.data.R
+demo/model/model
+!.lintr
+!*.stan
