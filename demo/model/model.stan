@@ -6,6 +6,14 @@ data {
     int<lower=1, upper=n_teams> away[n_games];
     int<lower=0> home_goals[n_games];
     int<lower=0> away_goals[n_games];
+    int<lower=0, upper=1> ot_input[n_games];
+    real<lower=0.001> sigma_offense_lambda;
+    real<lower=0.001> sigma_defense_lambda;
+    real<lower=0.001> sigma_advantage_lambda;
+}
+
+transformed data {
+    int n_pred = n_games - n_train;
 }
 
 parameters {
@@ -19,52 +27,82 @@ parameters {
 }
 
 model {
-    vector[n_train] home_xg;
-    vector[n_train] away_xg;
-
-    sigma_offense ~ exponential(0.1);
-    sigma_defense ~ exponential(0.1);
-    sigma_advantage ~ exponential(0.01);
+    sigma_offense ~ exponential(sigma_offense_lambda);
+    sigma_defense ~ exponential(sigma_defense_lambda);
+    sigma_advantage ~ exponential(sigma_advantage_lambda);
 
     offense ~ normal(0, sigma_offense);
     defense ~ normal(0, sigma_defense);
     home_advantage ~ normal(0, sigma_advantage);
 
     for (n in 1:n_train) {
-        home_xg[n] = (
-            offense[home[n]]
-            + defense[away[n]]
-            + home_advantage
+        home_goals[n] ~ poisson_log(
+            offense[home[n]] + defense[away[n]] + home_advantage
         );
-        away_xg[n] = (
-            offense[away[n]]
-            + defense[home[n]]
+        away_goals[n] ~ poisson_log(
+            offense[away[n]] + defense[home[n]]
         );
-
-        home_goals[n] ~ poisson_log(home_xg[n]);
-        away_goals[n] ~ poisson_log(away_xg[n]);
     }
 }
 
 generated quantities {
-    int<lower=0> pred_home_goals[n_games - n_train];
-    int<lower=0> pred_away_goals[n_games - n_train];
+    int<lower=0> pred_home_goals[n_pred];
+    int<lower=0> pred_away_goals[n_pred];
 
-    vector[n_games - n_train] home_xg;
-    vector[n_games - n_train] away_xg;
+    int<lower=0, upper=2> home_pts[n_games];
+    int<lower=0, upper=2> away_pts[n_games];
+    int<lower=0, upper=1> ot[n_games];
 
-    for (n in 1:(n_games - n_train)) {
-        home_xg[n] = (
-            offense[home[n]]
-            + defense[away[n]]
-            + home_advantage
+    for (n in 1:n_train) {
+        if (ot_input[n] == 0) {
+            if (home_goals[n] > away_goals[n]) {
+                home_pts[n] = 2;
+                away_pts[n] = 0;
+                ot[n] = 0;
+            } else {
+                home_pts[n] = 0;
+                away_pts[n] = 2;
+                ot[n] = 0;
+            }
+        } else {
+            if (home_goals[n] > away_goals[n]) {
+                home_pts[n] = 2;
+                away_pts[n] = 1;
+                ot[n] = 1;
+            } else {
+                home_pts[n] = 1;
+                away_pts[n] = 2;
+                ot[n] = 1;
+            }
+        }
+    }
+
+    for (n in 1:n_pred) {
+        pred_home_goals[n] = poisson_rng(
+            exp(offense[home[n]] + defense[away[n]] + home_advantage)
         );
-        away_xg[n] = (
-            offense[away[n]]
-            + defense[home[n]]
+        pred_away_goals[n] = poisson_rng(
+            exp(offense[away[n]] + defense[home[n]])
         );
 
-        pred_home_goals[n] = poisson_rng(exp(home_xg[n]));
-        pred_away_goals[n] = poisson_rng(exp(away_xg[n]));
+        if (pred_home_goals[n] > pred_away_goals[n]) {
+            home_pts[n + n_train] = 2;
+            away_pts[n + n_train] = 0;
+            ot[n + n_train] = 0;
+        } else if (pred_home_goals[n] < pred_away_goals[n]) {
+            home_pts[n + n_train] = 0;
+            away_pts[n + n_train] = 2;
+            ot[n + n_train] = 0;
+        } else {
+            if (uniform_rng(0.0, 1.0) >= 0.5) {
+                home_pts[n + n_train] = 2;
+                away_pts[n + n_train] = 1;
+                ot[n + n_train] = 1;
+            } else {
+                home_pts[n + n_train] = 1;
+                away_pts[n + n_train] = 2;
+                ot[n + n_train] = 1;
+            }
+        }
     }
 }

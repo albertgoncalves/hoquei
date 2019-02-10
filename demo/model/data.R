@@ -6,10 +6,15 @@ teams_to_indices = function(index, teams) {
     return(as.vector(sapply(teams, name_to_index(index))))
 }
 
-read_data = function(csvfile) {
-    data = read_csv(csvfile)[, 1:5]
-    names(data) = c("date", "away", "away_goals", "home", "home_goals")
+adjust_ot = function(data) {
+    data$ot = ifelse(data$ot == "", 0, 1)
     return(data)
+}
+
+read_data = function(csvfile) {
+    data = read_csv(csvfile)[, 1:6]
+    names(data) = c("date", "away", "away_goals", "home", "home_goals", "ot")
+    return(adjust_ot(data))
 }
 
 export_stan_data = function(data, datafile, teamsfile) {
@@ -22,6 +27,11 @@ export_stan_data = function(data, datafile, teamsfile) {
     away = teams_to_indices(teams_list, data$away)
     home_goals = data$home_goals
     away_goals = data$away_goals
+    ot_input = data$ot
+
+    sigma_offense_lambda = 0.01
+    sigma_defense_lambda = 0.01
+    sigma_advantage_lambda = 0.001
 
     items = c( "n_teams"
              , "n_games"
@@ -30,6 +40,10 @@ export_stan_data = function(data, datafile, teamsfile) {
              , "away"
              , "home_goals"
              , "away_goals"
+             , "ot_input"
+             , "sigma_offense_lambda"
+             , "sigma_defense_lambda"
+             , "sigma_advantage_lambda"
              )
 
     dump(items, datafile)

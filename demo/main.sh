@@ -23,7 +23,11 @@ grep -v "#" $report > "output.csv"
 cat $tmp > $report
 rm $tmp
 
-cat $report
+n=$(< $report wc -l)
+
+head -n 25 $report
+printf "... hiding %d lines ...\n" $(expr $n - 50)
+tail -n 25 $report
 
 Rscript posterior.R
 open Rplots.pdf
