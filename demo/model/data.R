@@ -6,15 +6,32 @@ teams_to_indices = function(index, teams) {
     return(as.vector(sapply(teams, name_to_index(index))))
 }
 
-adjust_ot = function(data) {
-    data$ot = ifelse(data$ot == "", 0, 1)
-    return(data)
-}
-
 read_data = function(csvfile) {
     data = read_csv(csvfile)[, 1:6]
     names(data) = c("date", "away", "away_goals", "home", "home_goals", "ot")
-    return(adjust_ot(data))
+    return(data)
+}
+
+adjust_ot = function(data) {
+    lambda = function(data, rows, team) {
+        column = sprintf("%s_goals", team)
+
+        values = data[, column]
+        values[rows] = data[rows, column] - 1
+
+        return(values)
+    }
+
+    data$ot = ifelse(data$ot == "", 0, 1)
+
+    ot = data$ot == 1
+    home_ot_wins = which(ot & (data$home_goals > data$away_goals))
+    away_ot_wins = which(ot & (data$home_goals < data$away_goals))
+
+    data$home_goals_no_ot = lambda(data, home_ot_wins, "home")
+    data$away_goals_no_ot = lambda(data, away_ot_wins, "away")
+
+    return(data)
 }
 
 export_stan_data = function(data, datafile, teamsfile) {
@@ -22,15 +39,17 @@ export_stan_data = function(data, datafile, teamsfile) {
 
     n_teams = length(teams_list)
     n_games = NROW(data)
-    n_train = as.integer(n_games * 0.5)
+    n_train = as.integer(n_games * 0.15)
     home = teams_to_indices(teams_list, data$home)
     away = teams_to_indices(teams_list, data$away)
     home_goals = data$home_goals
     away_goals = data$away_goals
+    home_goals_no_ot = data$home_goals_no_ot
+    away_goals_no_ot = data$away_goals_no_ot
     ot_input = data$ot
 
-    sigma_offense_lambda = 0.01
-    sigma_defense_lambda = 0.01
+    sigma_offense_lambda = 0.05
+    sigma_defense_lambda = 0.05
     sigma_advantage_lambda = 0.001
 
     items = c( "n_teams"
@@ -40,6 +59,8 @@ export_stan_data = function(data, datafile, teamsfile) {
              , "away"
              , "home_goals"
              , "away_goals"
+             , "home_goals_no_ot"
+             , "away_goals_no_ot"
              , "ot_input"
              , "sigma_offense_lambda"
              , "sigma_defense_lambda"
@@ -55,6 +76,6 @@ if (sys.nframe() == 0) {
     csvfile = sprintf("../data/%s.csv", season)
     datafile = "input.data.R"
 
-    data = read_data(csvfile)
+    data = adjust_ot(read_data(csvfile))
     export_stan_data(data, datafile, teamsfile())
 }

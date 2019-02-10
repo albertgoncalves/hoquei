@@ -6,6 +6,8 @@ data {
     int<lower=1, upper=n_teams> away[n_games];
     int<lower=0> home_goals[n_games];
     int<lower=0> away_goals[n_games];
+    int<lower=0> home_goals_no_ot[n_games];
+    int<lower=0> away_goals_no_ot[n_games];
     int<lower=0, upper=1> ot_input[n_games];
     real<lower=0.001> sigma_offense_lambda;
     real<lower=0.001> sigma_defense_lambda;
@@ -36,10 +38,10 @@ model {
     home_advantage ~ normal(0, sigma_advantage);
 
     for (n in 1:n_train) {
-        home_goals[n] ~ poisson_log(
+        home_goals_no_ot[n] ~ poisson_log(
             offense[home[n]] + defense[away[n]] + home_advantage
         );
-        away_goals[n] ~ poisson_log(
+        away_goals_no_ot[n] ~ poisson_log(
             offense[away[n]] + defense[home[n]]
         );
     }
