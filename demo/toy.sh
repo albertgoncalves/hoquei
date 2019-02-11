@@ -24,6 +24,10 @@ rm $tmp
 
 cat $report
 
+if [ ! $(uname -s) = "Darwin" ]; then
+    alias open="xdg-open"
+fi
+
 Rscript posterior.R
 open Rplots.pdf
 

@@ -11,6 +11,8 @@ with pkgs; mkShell {
         if [ $(uname -s) = "Darwin" ]; then
             alias ls='ls --color=auto'
             alias ll='ls -al'
+        else
+            alias open="xdg-open"
         fi
 
         d="data/"
