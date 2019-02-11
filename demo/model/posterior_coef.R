@@ -4,14 +4,6 @@ library(tools)
 
 source("../utils.R")
 
-draw = function(xs) {
-    sample(xs, size=2000, replace=TRUE)
-}
-
-extract_index = function(x) {
-    return(gsub(".*\\.([0-9]+)", "\\1", x))
-}
-
 extract_name = function(teams_list) {
     return(function(x) {
         return(teams_list[extract_index(x)])
@@ -44,43 +36,53 @@ group = function(data, headers_list, group_functions) {
     return(data)
 }
 
-error_plot = function(data, title) {
+error_plot = function(data, column, title) {
     group_functions = function(data) {
         return(c( team=unique(data$team)
-                , mean=mean(data$posterior)
-                , min=min(data$posterior)
-                , max=max(data$posterior)
-                , lower=quantile(data$posterior, .05)
-                , upper=quantile(data$posterior, .95)
+                , median=median(data[, column])
+                , min=min(data[, column])
+                , max=max(data[, column])
+                , lower=quantile(data[, column], .05)
+                , lower=quantile(data[, column], .16)
+                , upper=quantile(data[, column], .84)
+                , upper=quantile(data[, column], .95)
                 ))
     }
 
-    center = mean(data$posterior)
+    center = median(data[, column])
     data = group(data, list(data$team), group_functions)
     n = NROW(data)
 
-    data = data[order(data$mean), ]
+    for (column in names(data)) {
+        if (column != "team") {
+            data[, column] = as.numeric(as.character(data[, column]))
+        }
+    }
+
+    data = data[order(data$median), ]
 
     par(mar=c(3, 11, 2, 2))
-    plot( data$mean
+    plot( data$median
         , 1:n
         , yaxt="n"
         , ylab=""
         , xlim=c(min(data$min), max(data$max))
         , main=title
+        , pch=16
         )
     gray = adjustcolor("gray", 0.45)
     axis(2, at=1:31, tck=1, lty=2, labels=NA, col=gray)
     axis(side=2, at=1:n, labels=data$team, las=2)
     abline(v=center, lty=1, col=gray)
-    segments(y0=1:31, x0=data$lower, x1=data$upper)
+    segments(y0=1:31, x0=data$lower.5., x1=data$upper.95., lwd=0.75)
+    segments(y0=1:31, x0=data$lower.16., x1=data$upper.84., lwd=2.25)
 }
 
 bundle = function(data, header, teams_list) {
     columns = sprintf("%s.", header)
     title = sprintf("%s Coef.", toTitleCase(header))
     data = stack_columns(extract_with_labels(data, teams_list, columns))
-    error_plot(data, title)
+    error_plot(data, "posterior", title)
 }
 
 if (sys.nframe() == 0) {

@@ -6,12 +6,6 @@ teams_to_indices = function(index, teams) {
     return(as.vector(sapply(teams, name_to_index(index))))
 }
 
-read_data = function(csvfile) {
-    data = read_csv(csvfile)[, 1:6]
-    names(data) = c("date", "away", "away_goals", "home", "home_goals", "ot")
-    return(data)
-}
-
 adjust_ot = function(data) {
     lambda = function(data, rows, team) {
         column = sprintf("%s_goals", team)
@@ -39,7 +33,8 @@ export_stan_data = function(data, datafile, teamsfile) {
 
     n_teams = length(teams_list)
     n_games = NROW(data)
-    n_train = as.integer(n_games * 0.15)
+    n_train = sum(data$played)
+    # n_train = as.integer(n_games * 0.5)
     home = teams_to_indices(teams_list, data$home)
     away = teams_to_indices(teams_list, data$away)
     home_goals = data$home_goals
@@ -72,7 +67,7 @@ export_stan_data = function(data, datafile, teamsfile) {
 }
 
 if (sys.nframe() == 0) {
-    season = "regular_2018"
+    season = "regular_2019"
     csvfile = sprintf("../data/%s.csv", season)
     datafile = "input.data.R"
 

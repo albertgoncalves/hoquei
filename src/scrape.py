@@ -86,7 +86,7 @@ def write_season(data, csv_file):
 def main():
     browser = Chrome(environ["chromedriver_path"])
 
-    for year in range(2009, 2019):
+    for year in range(2009, 2020):
         for season in seasons():
             csv_file = filename(handle(season, year))
             if not isfile(csv_file):

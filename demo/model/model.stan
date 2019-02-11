@@ -81,10 +81,14 @@ generated quantities {
 
     for (n in 1:n_pred) {
         pred_home_goals[n] = poisson_rng(
-            exp(offense[home[n]] + defense[away[n]] + home_advantage)
+            exp(
+                offense[home[n + n_train]]
+                + defense[away[n + n_train]]
+                + home_advantage
+            )
         );
         pred_away_goals[n] = poisson_rng(
-            exp(offense[away[n]] + defense[home[n]])
+            exp(offense[away[n + n_train]] + defense[home[n + n_train]])
         );
 
         if (pred_home_goals[n] > pred_away_goals[n]) {

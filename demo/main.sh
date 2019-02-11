@@ -29,7 +29,7 @@ head -n 25 $report
 printf "... hiding %d lines ...\n" $(expr $n - 50)
 tail -n 25 $report
 
-Rscript posterior.R
+Rscript posterior_pts.R
 open Rplots.pdf
 
 cd ../
