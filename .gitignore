@@ -20,3 +20,5 @@ alt/test/test
 demo/model/model
 !.lintr
 !*.stan
+!toy
+demo/toy/model
