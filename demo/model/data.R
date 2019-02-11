@@ -34,7 +34,7 @@ export_stan_data = function(data, datafile, teamsfile) {
     n_teams = length(teams_list)
     n_games = NROW(data)
     n_train = sum(data$played)
-    # n_train = as.integer(n_games * 0.5)
+    # n_train = as.integer(n_games * 0.1)
     home = teams_to_indices(teams_list, data$home)
     away = teams_to_indices(teams_list, data$away)
     home_goals = data$home_goals
@@ -45,7 +45,7 @@ export_stan_data = function(data, datafile, teamsfile) {
 
     sigma_offense_lambda = 0.05
     sigma_defense_lambda = 0.05
-    sigma_advantage_lambda = 0.001
+    sigma_adv_lambda = 0.001
 
     items = c( "n_teams"
              , "n_games"
@@ -59,7 +59,7 @@ export_stan_data = function(data, datafile, teamsfile) {
              , "ot_input"
              , "sigma_offense_lambda"
              , "sigma_defense_lambda"
-             , "sigma_advantage_lambda"
+             , "sigma_adv_lambda"
              )
 
     dump(items, datafile)

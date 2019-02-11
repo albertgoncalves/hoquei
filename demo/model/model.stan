@@ -11,7 +11,7 @@ data {
     int<lower=0, upper=1> ot_input[n_games];
     real<lower=0.001> sigma_offense_lambda;
     real<lower=0.001> sigma_defense_lambda;
-    real<lower=0.001> sigma_advantage_lambda;
+    real<lower=0.001> sigma_adv_lambda;
 }
 
 transformed data {
@@ -31,7 +31,7 @@ parameters {
 model {
     sigma_offense ~ exponential(sigma_offense_lambda);
     sigma_defense ~ exponential(sigma_defense_lambda);
-    sigma_advantage ~ exponential(sigma_advantage_lambda);
+    sigma_advantage ~ exponential(sigma_adv_lambda);
 
     offense ~ normal(0, sigma_offense);
     defense ~ normal(0, sigma_defense);

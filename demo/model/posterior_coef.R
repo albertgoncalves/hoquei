@@ -42,10 +42,10 @@ error_plot = function(data, column, title) {
                 , median=median(data[, column])
                 , min=min(data[, column])
                 , max=max(data[, column])
-                , lower=quantile(data[, column], .05)
-                , lower=quantile(data[, column], .16)
-                , upper=quantile(data[, column], .84)
-                , upper=quantile(data[, column], .95)
+                , lower=quantile(data[, column], .025)
+                , lower=quantile(data[, column], .17)
+                , upper=quantile(data[, column], .83)
+                , upper=quantile(data[, column], .975)
                 ))
     }
 
@@ -74,8 +74,8 @@ error_plot = function(data, column, title) {
     axis(2, at=1:31, tck=1, lty=2, labels=NA, col=gray)
     axis(side=2, at=1:n, labels=data$team, las=2)
     abline(v=center, lty=1, col=gray)
-    segments(y0=1:31, x0=data$lower.5., x1=data$upper.95., lwd=0.75)
-    segments(y0=1:31, x0=data$lower.16., x1=data$upper.84., lwd=2.25)
+    segments(y0=1:31, x0=data$lower.2.5., x1=data$upper.97.5., lwd=0.75)
+    segments(y0=1:31, x0=data$lower.17., x1=data$upper.83., lwd=2.25)
 }
 
 bundle = function(data, header, teams_list) {
