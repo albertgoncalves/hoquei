@@ -6,10 +6,9 @@ let (@.) (f : ('b -> 'c)) (g : ('a -> 'b)) : ('a -> 'c) = fun x -> f @@ g x
 
 let finally (f: unit -> 'a) (resolve: unit -> 'b) : 'a =
     let f_exception =
-        try f () with
-              err ->
-                resolve ();
-                raise err in
+        try f () with err ->
+            resolve ();
+            raise err in
     resolve ();
     f_exception
 
