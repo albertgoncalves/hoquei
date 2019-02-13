@@ -29,3 +29,6 @@ demo/toy/model
 !*.css
 !*.js
 alt/index.html
+!imgs
+!*.png
+demo/toy/output.png
