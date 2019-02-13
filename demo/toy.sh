@@ -30,5 +30,6 @@ fi
 
 Rscript posterior.R
 open Rplots.pdf
+open output.png
 
 cd ../

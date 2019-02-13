@@ -1,0 +1,66 @@
+html, body, div, span {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    font-size: 30px;
+    vertical-align: baseline;
+}
+
+body {
+    font-family: Verdana, Geneva, sans-serif;
+    background: white;
+    color: black;
+}
+
+img {
+    display: block;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    width: 850px;
+}
+
+div.slide {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+    cursor: default;
+    padding: 5%;
+    position: relative;
+    width: 100%;
+}
+
+#controls {
+    margin-top: 50px;
+    padding-left: 100px;
+    font-size: 25px;
+    line-height: 50px;;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    background-color: hsla(150, 75%, 50%, 0.5);
+}
+
+.centered {
+    margin: 0;
+    position: absolute;
+    top: 38%;
+    left: 12%;
+}
+
+#stan {
+    font-size: 40px;
+}
+
+.link {
+    display: block;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+pre {
+    font-size: 20px;
+}

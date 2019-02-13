@@ -22,3 +22,9 @@ demo/model/model
 !*.stan
 !toy
 demo/toy/model
+!slides
+!css
+!js
+!*.html
+!*.css
+!*.js

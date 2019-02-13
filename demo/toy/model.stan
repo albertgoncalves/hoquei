@@ -11,7 +11,7 @@ parameters {
 }
 
 model {
-    real mu[n];
+    vector[n] mu;
 
     sigma ~ exponential(0.1);
 
