@@ -75,10 +75,15 @@ extract_sims = function(input_data, output_data, k) {
 }
 
 if (sys.nframe() == 0) {
+    source(teamsfile())
     season = "regular_2019"
     csvfile = sprintf("../data/%s.csv", season)
     input_data = index_input(read_data(csvfile))
     output_data = read_csv("output.csv")
+
+    for (header in c("offense", "defense")) {
+        bundle(output_data, header, teams_list)
+    }
 
     data = extract_sims(input_data, output_data, 1000)
     error_plot(data, "pts", "Point Projections, 2019")

@@ -8,15 +8,33 @@ generate_sims = function(n, m, b, sigma) {
     return(list(x, y))
 }
 
-viz = function(x, y, m, b, ns, xs, ys, m_post, b_post, sigma) {
+plot_curve = function(posterior_samples, init_value, title) {
+    plot(density(posterior_samples), main=title)
+    abline(v=init_value, col="red")
+}
+
+plot_parameters = function(m, b, sigma, m_post, b_post, sigma_post) {
+    plot_curve(m_post, m, "m")
+    plot_curve(b_post, b, "b")
+    plot_curve(sigma_post, sigma, "sigma")
+}
+
+plot_model = function( x, y, m, b, sigma, ns, xs, ys, m_post, b_post
+                     , sigma_post) {
+    layout(matrix(c(1, 1, 1, 1, 1, 1, 2, 3, 4), 3, 3, byrow=TRUE))
+
     plot(x, y, col="white")
-    points(xs, ys, col=adjustcolor("gray12", 500 / ns), pch=16)
+    points(xs, ys, col=adjustcolor("gray12", 750 / ns), pch=16)
+
     for (i in samples) {
-        abline(a=b_post[i], b=m_post[i], col=adjustcolor("black", 0.045))
+        abline(a=b_post[i], b=m_post[i], col=adjustcolor("black", 0.055))
     }
+
     abline(a=b, b=m, col="red")
     points(x, y, col=adjustcolor("coral", 0.85), pch=16)
     points(x, y, col=adjustcolor("white", 0.85))
+
+    plot_parameters(m, b, sigma, m_post, b_post, sigma_post)
 }
 
 plot_output = function(output_data) {
@@ -46,14 +64,14 @@ if (sys.nframe() == 0) {
 
     m_post = output_data$m
     b_post = output_data$b
-    sigma = output_data$sigma
+    sigma_post = output_data$sigma
 
-    ss = 10000
-    s = sample(1:NROW(output_data), ss, replace=TRUE)
-    sims = generate_sims(ss, m_post[s], b_post[s], sigma[s])
+    ns = 10000
+    s = sample(1:NROW(output_data), ns, replace=TRUE)
+    sims = generate_sims(ns, m_post[s], b_post[s], sigma_post[s])
     xs = sims[[1]]
     ys = sims[[2]]
 
-    viz(x, y, m, b, ss, xs, ys, m_post, b_post, sigma)
+    plot_model(x, y, m, b, sigma, ns, xs, ys, m_post, b_post, sigma_post)
     plot_output(output_data)
 }

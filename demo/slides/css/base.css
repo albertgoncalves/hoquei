@@ -18,7 +18,7 @@ img {
     height: auto;
     margin-left: auto;
     margin-right: auto;
-    width: 850px;
+    width: 800px;
 }
 
 div.slide {
@@ -32,10 +32,11 @@ div.slide {
 }
 
 #controls {
-    margin-top: 50px;
-    padding-left: 100px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 150px;
     font-size: 25px;
-    line-height: 50px;
+    line-height: 20px;
     width: 100vw;
     margin-left: calc(-50vw + 50%);
     background-color: hsla(150, 75%, 50%, 0.5);
@@ -44,8 +45,8 @@ div.slide {
 .centered {
     margin: 0;
     position: absolute;
-    top: 38%;
-    left: 12%;
+    top: 40%;
+    left: 25%;
 }
 
 #stan {

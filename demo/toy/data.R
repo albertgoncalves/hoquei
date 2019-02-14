@@ -1,24 +1,18 @@
 #!/usr/bin/env Rscript
 
-noise = function(n, y) {
-    noise = runif(n, runif(n, -1, 0), runif(n, 0, 1))
-    ys = y[sample(1:n, as.integer(n / (length(y) * 0.75)))]
-    y = y + (mean(ys) * noise)
-    return(y)
-}
-
 generate = function() {
-    n = 15
-    x = sample(1:1000, n, replace=TRUE)
-    r = runif(4, -100, 100)
+    n = 4
+    x = sample(1:100, n, replace=TRUE)
+    r = runif(2, -15, 15)
     b = r[1]
     m = r[2]
-    y = noise(n, (m * x) + b)
-    return(list(n, x, y, m, b))
+    sigma = runif(1, 10, 100)
+    y = rnorm(n, (m * x) + b, sigma)
+    return(list(n, x, y, m, b, sigma))
 }
 
 if (sys.nframe() == 0) {
-    set.seed(8)
+    set.seed(1003)
 
     data = generate()
     n = data[[1]]
@@ -26,7 +20,8 @@ if (sys.nframe() == 0) {
     y = data[[3]]
     m = data[[4]]
     b = data[[5]]
+    sigma = data[[6]]
 
     dump(c("n", "x", "y"), "input.data.R")
-    dump(c("m", "b"), "parameters.data.R")
+    dump(c("m", "b", "sigma"), "parameters.data.R")
 }

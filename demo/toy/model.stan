@@ -1,7 +1,7 @@
 data {
     int<lower=1> n;
-    real x[n];
-    real y[n];
+    vector[n] x;
+    vector[n] y;
 }
 
 parameters {
@@ -11,13 +11,6 @@ parameters {
 }
 
 model {
-    vector[n] mu;
-
-    sigma ~ exponential(0.1);
-
-    for (i in 1:n) {
-        mu[i] = (m * x[i]) + b;
-    }
-
-    y ~ normal(mu, sigma);
+    sigma ~ exponential(0.01);
+    y ~ normal((m * x) + b, sigma);
 }

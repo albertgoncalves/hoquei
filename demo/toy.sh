@@ -13,7 +13,7 @@ cd ../toy
 report="report.csv"
 tmp="tmp.txt"
 ./model sample \
-    random seed=123 \
+    random seed=1234 \
     data file="input.data.R" \
     output file=$report
 ./../cmdstan/bin/stansummary $report > $tmp
