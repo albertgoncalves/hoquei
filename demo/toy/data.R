@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 generate = function() {
-    n = 30
+    n = 4
     x = sample(1:100, n, replace=TRUE)
     r = runif(2, -15, 15)
     b = r[1]
@@ -12,7 +12,7 @@ generate = function() {
 }
 
 if (sys.nframe() == 0) {
-    set.seed(1003)
+    set.seed(1004)
 
     data = generate()
     n = data[[1]]
