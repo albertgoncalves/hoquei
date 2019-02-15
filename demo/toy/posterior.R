@@ -41,6 +41,7 @@ plot_lines = function(n, m, b, alpha) {
 }
 
 plot_model = function(x, y, m, b, sigma, output_data, n_lines, n_points) {
+    png("model.png", width=6, height=6.5, units="in", res=150)
     layout(matrix(c(1, 1, 1, 1, 1, 1, 2, 3, 4), 3, 3, byrow=TRUE))
 
     sims = sim_points(n_points, output_data)
@@ -68,7 +69,6 @@ plot_output = function(output_data) {
     mx = mx + (mn - (mx * my))
 
     png("output.png", width=13, height=14, units="in", res=150)
-
     layout(matrix(1:mn, mx, my, byrow=TRUE))
 
     for (column in names(output_data)) {

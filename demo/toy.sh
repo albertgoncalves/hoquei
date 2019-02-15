@@ -29,7 +29,7 @@ if [ ! $(uname -s) = "Darwin" ]; then
 fi
 
 Rscript posterior.R
-open Rplots.pdf
+open model.png
 open output.png
 
 cd ../
