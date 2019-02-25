@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 generate = function() {
-    n = 4
+    n = 50
     x = sample(1:100, n, replace=TRUE)
     r = runif(2, -15, 15)
     b = r[1]

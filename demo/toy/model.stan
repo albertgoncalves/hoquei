@@ -12,5 +12,7 @@ parameters {
 
 model {
     sigma ~ exponential(0.01);
-    y ~ normal((m * x) + b, sigma);
+
+    target += normal_lpdf(y | (m * x) + b, sigma);  # | equivalent expressions
+    # y ~ normal((m * x) + b, sigma);               # |
 }
