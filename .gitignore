@@ -33,3 +33,5 @@ alt/index.html
 !*.png
 demo/toy/output.png
 demo/toy/model.png
+!pbp
+!*.json
