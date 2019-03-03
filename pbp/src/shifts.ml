@@ -50,9 +50,10 @@ let extract (json : Y.json) : shift option =
                 ; duration = access "duration" |> to_seconds
                 }
 
+let csv_concat : (string list -> string) = S.concat ";"
+
 let csv_header : string =
-    S.concat
-        ";"
+    csv_concat
         [ "first_name"
         ; "last_name"
         ; "game_id"
@@ -62,8 +63,7 @@ let csv_header : string =
         ]
 
 let csv_row (shift : shift) : string =
-    S.concat
-        ";"
+    csv_concat
         [ shift.first_name
         ; shift.last_name
         ; shift.game_id |> string_of_int
