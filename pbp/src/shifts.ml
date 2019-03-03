@@ -1,5 +1,6 @@
+module C = Csv
 module L = List
-module J = Jsonutils
+module J = Json
 module S = String
 module T = Utils
 module Y = Yojson.Basic
@@ -63,10 +64,8 @@ let shift_to_slices (shift : shift option) : shift_slice list =
                 let offset = (shift.period - 1) * 20 * 60 in
                 loop shift.id shift.end_time offset [] shift.duration
 
-let csv_concat : (string list -> string) = S.concat ";"
-
 let csv_header : string =
-    csv_concat
+    C.csv_concat
         [ "game_id"
         ; "team_name"
         ; "player_id"
@@ -76,7 +75,7 @@ let csv_header : string =
         ]
 
 let csv_row (slice : shift_slice) : string =
-    csv_concat
+    C.csv_concat
         [ slice.id.game_id |> string_of_int
         ; slice.id.team_name
         ; slice.id.player_id |> string_of_int
