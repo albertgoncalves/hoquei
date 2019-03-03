@@ -7,6 +7,8 @@ with pkgs; mkShell {
                     ocaml-ng.ocamlPackages_4_07.ocp-indent
                     ocaml-ng.ocamlPackages_4_07.utop
                     jq
+                    python36
+                    python36Packages.pandas
                     python36Packages.csvkit
                   ];
     shellHook = ''

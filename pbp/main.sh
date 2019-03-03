@@ -6,9 +6,9 @@ cd src/
 
 ocamlfind ocamlopt \
     -package yojson \
-    -linkpkg -g utils.ml shifts.ml \
+    -linkpkg -g utils.ml jsonutils.ml shifts.ml \
     -o shifts
 
-./shifts
+./shifts "../data/shifts.json" "../data/shifts.csv"
 
 cd ../
