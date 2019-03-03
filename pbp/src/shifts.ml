@@ -65,7 +65,7 @@ let shift_to_slices (shift : shift option) : shift_slice list =
                 loop shift.id shift.end_time offset [] shift.duration
 
 let csv_header : string =
-    C.csv_concat
+    C.concat
         [ "game_id"
         ; "team_name"
         ; "player_id"
@@ -75,7 +75,7 @@ let csv_header : string =
         ]
 
 let csv_row (slice : shift_slice) : string =
-    C.csv_concat
+    C.concat
         [ slice.id.game_id |> string_of_int
         ; slice.id.team_name
         ; slice.id.player_id |> string_of_int
