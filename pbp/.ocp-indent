@@ -119,7 +119,7 @@ align_ops = true
 #    match foo with         #    match foo with
 #    | _ -> some_fun        #    | _ -> some_fun
 #      ^^parameter          #           ^^parameter
-align_params = auto
+align_params = never
 
 
 #
