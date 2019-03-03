@@ -26,7 +26,7 @@ let rec last : ('a list -> 'a) = function
     | (_::xs) -> last xs
 
 let main () =
-    let filename = "shifts.json" in
+    let filename = "data/shifts.json" in
     let json = Y.from_file filename in
     let data = json |> U.member "data" |> U.to_list |> last in
     let print_blob () : unit = data |> Y.pretty_to_string |> print_endline in
