@@ -1,6 +1,7 @@
 module L = List
 module P = Printf
 module S = String
+module T = Utils
 module Y = Yojson.Basic
 module U = Y.Util
 
@@ -12,8 +13,6 @@ type shift =
     ; end_time : int
     ; duration : int
     }
-
-exception Value of string
 
 let clock_to_seconds : (string option -> int) =
     let convert (minutes : string) (seconds : string) : int =
@@ -27,12 +26,7 @@ let clock_to_seconds : (string option -> int) =
                 | [minutes; seconds] -> convert minutes seconds
                 | _ ->
                     let error = P.sprintf "unable to parse '%s'" time in
-                    raise (Value error)
-
-let rec last : ('a list -> 'a) = function
-    | [] -> raise (Value "empty list")
-    | [x] -> x
-    | (_::xs) -> last xs
+                    raise (T.Value error)
 
 let extract (json : Y.json) : shift option =
     match json |> U.member "eventDescription" |> U.to_string_option with
@@ -72,16 +66,10 @@ let csv_row (shift : shift) : string =
         ; shift.duration |> string_of_int
         ]
 
-let take (n : int) (xs : 'a list) : 'a list =
-    let rec loop (accu : 'a list) : (('a list * int) -> 'a list) = function
-        | ([], _) | (_, 0) -> accu
-        | ((x::xs), n) -> loop (x::accu) (xs, n - 1) in
-    loop [] (xs, n)
-
 let main () =
-    let filename = "data/shifts.json" in
+    let filename = "../data/shifts.json" in
     let json = Y.from_file filename in
-    let blobs = json |> U.member "data" |> U.to_list |> take 5 in
+    let blobs = json |> U.member "data" |> U.to_list |> T.take 5 in
     let print_blob () : unit =
         L.iter
             (fun blob -> blob |> Y.pretty_to_string |> print_endline)

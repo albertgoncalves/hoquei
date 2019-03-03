@@ -2,9 +2,13 @@
 
 set -e
 
+cd src/
+
 ocamlfind ocamlopt \
     -package yojson \
-    -linkpkg -g $1.ml \
-    -o $1
+    -linkpkg -g utils.ml shifts.ml \
+    -o shifts
 
-./$1
+./shifts
+
+cd ../
