@@ -13,6 +13,7 @@ ocamlfind ocamlopt \
     -linkpkg -g utils.ml csv.ml json.ml shifts.ml \
     -o shifts
 
-./shifts "../data/shifts.json" "../data/shifts.csv"
+filename="../data/shifts"
+./shifts $filename".json" $filename".csv"
 
 cd ../
