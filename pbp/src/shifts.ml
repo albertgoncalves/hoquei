@@ -78,15 +78,15 @@ let csv_header : string =
         ; "second"
         ]
 
-let csv_row (slice : shift_slice) : string =
+let csv_row (shift_slice : shift_slice) : string =
     C.concat
-        [ slice.id.game_id |> string_of_int
-        ; slice.id.team_id |> string_of_int
-        ; slice.id.team_name
-        ; slice.id.player_id |> string_of_int
-        ; slice.id.first_name
-        ; slice.id.last_name
-        ; slice.second |> string_of_int
+        [ shift_slice.id.game_id |> string_of_int
+        ; shift_slice.id.team_id |> string_of_int
+        ; shift_slice.id.team_name
+        ; shift_slice.id.player_id |> string_of_int
+        ; shift_slice.id.first_name
+        ; shift_slice.id.last_name
+        ; shift_slice.second |> string_of_int
         ]
 
 let main () =
