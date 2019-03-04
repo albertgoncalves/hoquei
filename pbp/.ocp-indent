@@ -106,7 +106,7 @@ strict_comments = false
 # for example (left: `false'; right: `true')
 #    let f x = x            #    let f x = x
 #      + y                  #              + y
-align_ops = true
+align_ops = false
 
 # Function parameters are normally indented one level from the line containing
 # the function. This option can be used to have them align relative to the

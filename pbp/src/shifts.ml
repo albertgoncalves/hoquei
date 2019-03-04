@@ -8,6 +8,7 @@ module U = Y.Util
 
 type id =
     { game_id : int
+    ; team_id : int
     ; team_name : string
     ; player_id : int
     ; first_name : string
@@ -33,14 +34,16 @@ let extract_shift (json : Y.json) : shift option =
             let access (field : string) : Y.json = json |> U.member field in
             let to_seconds (time : Y.json) : int =
                 time |> U.to_string_option |> J.clock_to_seconds in
+            let id =
+                { game_id = access "gameId" |> U.to_int
+                ; team_id = access "teamId" |> U.to_int
+                ; team_name = access "teamName" |> U.to_string
+                ; player_id = access "playerId" |> U.to_int
+                ; first_name = access "firstName" |> U.to_string
+                ; last_name = access "lastName" |> U.to_string
+                } in
             Some
-                { id =
-                      { game_id = access "gameId" |> U.to_int
-                      ; team_name = access "teamName" |> U.to_string
-                      ; player_id = access "playerId" |> U.to_int
-                      ; first_name = access "firstName" |> U.to_string
-                      ; last_name = access "lastName" |> U.to_string
-                      }
+                { id = id
                 ; period = access "period" |> U.to_int
                 ; end_time = access "endTime" |> to_seconds
                 ; duration = access "duration" |> to_seconds
@@ -67,6 +70,7 @@ let shift_to_slices (shift : shift option) : shift_slice list =
 let csv_header : string =
     C.concat
         [ "game_id"
+        ; "team_id"
         ; "team_name"
         ; "player_id"
         ; "first_name"
@@ -77,6 +81,7 @@ let csv_header : string =
 let csv_row (slice : shift_slice) : string =
     C.concat
         [ slice.id.game_id |> string_of_int
+        ; slice.id.team_id |> string_of_int
         ; slice.id.team_name
         ; slice.id.player_id |> string_of_int
         ; slice.id.first_name
