@@ -45,7 +45,8 @@ let unpack_players (json : Y.json) : player list =
 
 let csv_header : string =
     C.concat
-        [ "team_id"
+        [ "game_id"
+        ; "team_id"
         ; "team_name"
         ; "player_id"
         ; "full_name"
@@ -53,9 +54,10 @@ let csv_header : string =
         ; "position"
         ]
 
-let csv_row (player : player) : string =
+let csv_row (game_id : int) (player : player) : string =
     C.concat
-        [ player.team_id |> string_of_int
+        [ game_id |> string_of_int
+        ; player.team_id |> string_of_int
         ; player.team_name
         ; player.player_id |> string_of_int
         ; player.full_name
@@ -64,8 +66,19 @@ let csv_row (player : player) : string =
         ]
 
 let main () =
-    let json = Y.from_file "../data/game.json" |> U.member "liveData" in
-    let rows = json |> all_players |> unpack_players |> L.map csv_row in
+    let json = Y.from_file "../data/game.json" in
+    let game_id =
+        json
+        |> U.member "gameData"
+        |> U.member "game"
+        |> U.member "pk"
+        |> U.to_int in
+    let rows =
+        json
+        |> U.member "liveData"
+        |> all_players
+        |> unpack_players
+        |> L.map (fun player -> csv_row game_id player) in
     L.iter print_endline (csv_header::rows)
 
 let () = main ()
