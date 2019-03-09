@@ -20,12 +20,6 @@ with pkgs; mkShell {
             alias ls='ls --color=auto'
             alias ll='ls -al'
         fi
-
-        directory="data/"
-        if [ ! -d $directory ]; then
-            mkdir $directory
-        fi
-
         alias csvlook="csvlook --no-inference -d ';'"
         alias sqlite3="rlwrap sqlite3 -header -csv -separator ';'"
     '';
