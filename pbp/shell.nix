@@ -3,6 +3,7 @@ with pkgs; mkShell {
     name = "JsonOcaml";
     buildInputs = [ ocaml-ng.ocamlPackages_4_07.ocaml
                     ocaml-ng.ocamlPackages_4_07.yojson
+                    ocaml-ng.ocamlPackages_4_07.ocaml_sqlite3
                     ocaml-ng.ocamlPackages_4_07.findlib
                     ocaml-ng.ocamlPackages_4_07.ocp-indent
                     ocaml-ng.ocamlPackages_4_07.utop
