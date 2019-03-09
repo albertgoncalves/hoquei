@@ -12,6 +12,8 @@ with pkgs; mkShell {
                           csvkit
                         ]
                     ))
+                    sqlite
+                    rlwrap
                   ];
     shellHook = ''
         if [ $(uname -s) = "Darwin" ]; then
@@ -19,5 +21,6 @@ with pkgs; mkShell {
             alias ll='ls -al'
         fi
         alias csvlook="csvlook --no-inference -d ';'"
+        alias sqlite3="rlwrap sqlite3 -header -csv -separator ';'"
     '';
 }
