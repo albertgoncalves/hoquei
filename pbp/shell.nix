@@ -3,7 +3,6 @@ with pkgs; mkShell {
     name = "JsonOcaml";
     buildInputs = [ ocaml-ng.ocamlPackages_4_07.ocaml
                     ocaml-ng.ocamlPackages_4_07.yojson
-                    ocaml-ng.ocamlPackages_4_07.ocaml_sqlite3
                     ocaml-ng.ocamlPackages_4_07.findlib
                     ocaml-ng.ocamlPackages_4_07.ocp-indent
                     ocaml-ng.ocamlPackages_4_07.utop
@@ -21,6 +20,12 @@ with pkgs; mkShell {
             alias ls='ls --color=auto'
             alias ll='ls -al'
         fi
+
+        directory="data/"
+        if [ ! -d $directory ]; then
+            mkdir $directory
+        fi
+
         alias csvlook="csvlook --no-inference -d ';'"
         alias sqlite3="rlwrap sqlite3 -header -csv -separator ';'"
     '';

@@ -13,6 +13,7 @@ ocamlfind ocamlopt \
     -linkpkg -g utils.ml csv.ml json.ml game.ml \
     -o game
 
-./game
+directory="../data"
+./game $directory"/game.json" $directory"/events.csv" $directory"/players.csv"
 
 cd ../

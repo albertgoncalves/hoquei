@@ -34,5 +34,4 @@ alt/index.html
 demo/toy/output.png
 demo/toy/model.png
 !pbp
-!*.json
 !peek

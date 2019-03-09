@@ -3,6 +3,8 @@ module P = Printf
 
 exception Value of string
 
+let (@.) (f : 'b -> 'c) (g : 'a -> 'b) : ('a -> 'c) = fun x -> x |> g |> f
+
 let rec last : ('a list -> 'a) = function
     | [] -> raise (Value "empty list")
     | [x] -> x
@@ -22,8 +24,20 @@ let finally (f : unit -> 'a) (resolve : unit -> 'b) : 'a =
     resolve ();
     f_exception
 
+let apply (f : unit -> unit) : unit = f ()
+
 let write_to_file (filename : string) (strings : string list) : unit =
     let out_channel = open_out filename in
     finally
         (fun () -> L.iter (P.fprintf out_channel "%s\n") strings)
         (fun () -> close_out out_channel)
+
+let print_option : (string option -> unit) = function
+    | Some a -> print_endline a
+    | None -> ()
+
+let try_option f =
+    try
+        Some (f ())
+    with _ ->
+        None
