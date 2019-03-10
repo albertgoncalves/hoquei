@@ -24,6 +24,7 @@ type shift =
 
 type shift_slice =
     { id : id
+    ; period : int
     ; second : int
     }
 
@@ -53,19 +54,16 @@ let shift_to_slices (shift : shift option) : shift_slice list =
     match shift with
         | None -> []
         | Some shift ->
-            if shift.period > 3 then
-                []
-            else
-                let rec loop id end_time offset xs = function
-                    | 0 -> xs
-                    | s ->
-                        let x =
-                            { id = id
-                            ; second = offset + end_time - s + 1
-                            } in
-                        loop id end_time offset (x::xs) (s - 1) in
-                let offset = (shift.period - 1) * 20 * 60 in
-                loop shift.id shift.end_time offset [] shift.duration
+            let rec loop id period end_time xs = function
+                | 0 -> xs
+                | s ->
+                    let x =
+                        { id = id
+                        ; period = period
+                        ; second = end_time - s + 1
+                        } in
+                    loop id period end_time (x::xs) (s - 1) in
+            loop shift.id shift.period shift.end_time [] shift.duration
 
 let csv_header : string =
     C.concat
@@ -75,6 +73,7 @@ let csv_header : string =
         ; "player_id"
         ; "first_name"
         ; "last_name"
+        ; "period"
         ; "second"
         ]
 
@@ -86,6 +85,7 @@ let csv_row (shift_slice : shift_slice) : string =
         ; shift_slice.id.player_id |> string_of_int
         ; shift_slice.id.first_name
         ; shift_slice.id.last_name
+        ; shift_slice.period |> string_of_int
         ; shift_slice.second |> string_of_int
         ]
 
