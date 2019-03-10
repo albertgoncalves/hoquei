@@ -27,6 +27,7 @@ def left(goal):
         , "width": goal["width"]
         }
 
+
 def draw_goal(ax, goal, alpha, right=True):
     if right:
         x = goal["x"]
@@ -38,11 +39,13 @@ def draw_goal(ax, goal, alpha, right=True):
     ax.add_patch(patches.Rectangle(*rect, alpha=alpha, color="k"))
     ax.axvline(x, alpha=alpha)
 
+
 def draw_lines(ax, alpha):
     ax.axhline(0, color="k", alpha=0.1)
     ax.axvline(0, color="red", alpha=alpha)
     for v in [25, -25]:
         ax.axvline(v, color="blue", alpha=alpha)
+
 
 def draw_circles(ax, alpha):
     xys = [(69 * x, 22 * y) for x in [-1, 1] for y in [-1, 1]]
