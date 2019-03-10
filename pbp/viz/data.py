@@ -5,10 +5,12 @@
 def filter_shots(events):
     events.sort_values(by=["period", "second"], inplace=True)
     events["prev_result"] = events.result.shift(1)
+
     rows = \
         ( events.result.isin(["Shot", "Missed Shot", "Goal"])
         & (events.period <= 3)
         )
+
     events = events.loc[rows].copy()
     return events.loc[events.prev_result != "Penalty"].copy()
 
@@ -25,12 +27,15 @@ def flip(events, full=True):
             ]
     else:
         rows = [(events.period == 2)]
+
     for row in rows:
         for column in ["x", "y"]:
             events.loc[row, column] *= -1
+
     if events.x.mean() < 0:
         events.x *= -1
         events.y *= -1
+
     return events.copy()
 
 
@@ -50,23 +55,27 @@ def process(shifts):
         , "second"
         ]
     params = {"player_id": "nunique", "goalie": "sum"}
+
     shifts = shifts.groupby(by=columns, as_index=False).agg(params)
     shifts.rename(columns={"player_id": "skaters"}, inplace=True)
     shifts.skaters -= shifts.goalie
-    return shifts
+    return shifts.copy()
+
+
+def slice(shifts, columns, venue):
+    params = \
+        { "skaters": "{}_skaters".format(venue)
+        , "goalie": "{}_goalie".format(venue)
+        }
+
+    subset = shifts.loc[shifts.venue == venue].copy()
+    subset.rename(columns=params, inplace=True)
+    return subset[columns + list(params.values())].copy()
 
 
 def pivot(shifts):
-    def slice(shifts, columns, venue):
-        subset = shifts.loc[shifts.venue == venue].copy()
-        params = \
-            { "skaters": "{}_skaters".format(venue)
-            , "goalie": "{}_goalie".format(venue)
-            }
-        subset.rename(columns=params, inplace=True)
-        return subset[columns + list(params.values())].copy()
-
     columns = ["game_id", "period", "second"]
+
     home = slice(shifts, columns, "home")
     away = slice(shifts, columns, "away")
     return home.merge(away, on=columns, how="outer").copy(True)
