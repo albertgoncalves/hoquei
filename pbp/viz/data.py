@@ -28,6 +28,9 @@ def flip(events, full=True):
     for row in rows:
         for column in ["x", "y"]:
             events.loc[row, column] *= -1
+    if events.x.mean() < 0:
+        events.x *= -1
+        events.y *= -1
     return events.copy()
 
 
