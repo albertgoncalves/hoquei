@@ -15,7 +15,7 @@ def filter_shots(events):
     return events.loc[events.prev_result != "Penalty"].copy()
 
 
-def combine(b):
+def left_join(b):
     return lambda a: a.merge(b, how="left").copy()
 
 
@@ -89,6 +89,7 @@ def team_strength(special_teams=False):
             | (events.home_goalie != 1)
             | (events.away_goalie != 1)
             )
+
         if special_teams:
             return events.loc[rows].copy()
         else:
