@@ -41,3 +41,8 @@ let try_option f =
         Some (f ())
     with _ ->
         None
+
+let option_to_string (to_string : 'a -> string) : ('a option -> string) =
+    function
+        | None -> ""
+        | Some x -> to_string x
