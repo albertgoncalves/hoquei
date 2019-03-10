@@ -11,6 +11,7 @@ with pkgs; mkShell {
                         [ pandas
                           csvkit
                           matplotlib
+                          flake8
                         ]
                     ))
                     sqlite
@@ -23,5 +24,6 @@ with pkgs; mkShell {
         fi
         alias csvlook="csvlook --no-inference -d ';'"
         alias sqlite3="rlwrap sqlite3 -header -csv -separator ';'"
+        alias flake8="flake8 --ignore E124,E128,E201,E203,E241,E402,W503"
     '';
 }
