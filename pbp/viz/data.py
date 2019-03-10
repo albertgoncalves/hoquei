@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-A
+# -*- coding: utf-8 -*-
 
 
 def filter_shots(events):

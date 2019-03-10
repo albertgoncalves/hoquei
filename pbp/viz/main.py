@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-A
+# -*- coding: utf-8 -*-
 
 import matplotlib.lines as lines
 import matplotlib.pyplot as plt

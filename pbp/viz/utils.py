@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-A
+# -*- coding: utf-8 -*-
 
 from pandas import read_csv as pd_read_csv
 
