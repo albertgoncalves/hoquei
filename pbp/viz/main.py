@@ -19,37 +19,38 @@ def colors(cmap):
     return f
 
 
+def left(goal):
+    return \
+        { "x": (goal["x"] * -1) - goal["length"]
+        , "y": goal["y"]
+        , "length": goal["length"]
+        , "width": goal["width"]
+        }
+
+def draw_goal(ax, goal, alpha, right=True):
+    if right:
+        x = goal["x"]
+    else:
+        goal = left(goal)
+        x = goal["x"] + goal["length"]
+
+    rect = ((goal["x"], goal["y"]), goal["length"], goal["width"])
+    ax.add_patch(patches.Rectangle(*rect, alpha=alpha, color="k"))
+    ax.axvline(x, alpha=alpha)
+
+def draw_lines(ax, alpha):
+    ax.axhline(0, color="k", alpha=0.1)
+    ax.axvline(0, color="red", alpha=alpha)
+    for v in [25, -25]:
+        ax.axvline(v, color="blue", alpha=alpha)
+
+def draw_circles(ax, alpha):
+    xys = [(69 * x, 22 * y) for x in [-1, 1] for y in [-1, 1]]
+    for xy in xys:
+        ax.add_patch(patches.Circle(xy, 15, fill=None, alpha=alpha))
+
+
 def rink(ax):
-    def away(goal):
-        return \
-            { "x": (goal["x"] * -1) - goal["length"]
-            , "y": goal["y"]
-            , "length": goal["length"]
-            , "width": goal["width"]
-            }
-
-    def draw_goal(ax, goal, alpha, right=True):
-        if right:
-            x = goal["x"]
-        else:
-            goal = away(goal)
-            x = goal["x"] + goal["length"]
-
-        rect = ((goal["x"], goal["y"]), goal["length"], goal["width"])
-        ax.add_patch(patches.Rectangle(*rect, alpha=alpha, color="k"))
-        ax.axvline(x, alpha=alpha)
-
-    def draw_lines(ax, alpha):
-        ax.axhline(0, color="k", alpha=0.1)
-        ax.axvline(0, color="red", alpha=alpha)
-        for v in [25, -25]:
-            ax.axvline(v, color="blue", alpha=alpha)
-
-    def draw_circles(ax, alpha):
-        xys = [(69 * x, 22 * y) for x in [-1, 1] for y in [-1, 1]]
-        for xy in xys:
-            ax.add_patch(patches.Circle(xy, 15, fill=None, alpha=alpha))
-
     alpha = 0.2
     goal = \
         { "length": 2
