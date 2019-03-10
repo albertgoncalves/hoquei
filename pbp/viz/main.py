@@ -26,7 +26,6 @@ def rink(ax, home=True):
             , "y": goal["y"]
             , "length": goal["length"]
             , "width": goal["width"]
-            , "edge": goal["edge"]
             }
 
     def draw_goal(goal, alpha, home=True):
@@ -38,9 +37,7 @@ def rink(ax, home=True):
 
         rect = ((goal["x"], goal["y"]), goal["length"], goal["width"])
         ax.add_patch(patches.Rectangle(*rect, alpha=alpha, color="k"))
-
-        line = ([x, x], [goal["edge"] * -1, goal["edge"]])
-        ax.add_line(lines.Line2D(*line, alpha=alpha))
+        ax.axvline(x, alpha=alpha)
 
     def draw_lines(alpha):
         ax.axhline(0, color="k", alpha=0.1)
@@ -59,12 +56,11 @@ def rink(ax, home=True):
         , "width": 6
         , "x": 89
         , "y": -3
-        , "edge": 45
         }
 
     ax.set_aspect("equal")
     ax.set_xlim([-10, 100])
-    ax.set_ylim([goal["edge"] * -1, goal["edge"]])
+    ax.set_ylim([-45, 45])
     ax.set_xticks([])
     ax.set_yticks([])
 
@@ -93,7 +89,7 @@ def plot(cmap):
                 axs[i, j].scatter( subset.x
                                  , subset.y
                                  , c=subset.color.values
-                                 , s=70
+                                 , s=100
                                  , edgecolor="k"
                                  , alpha=0.8
                                  )
@@ -148,7 +144,7 @@ def main():
         , combine(game)
         , combine(shifts)
         , filter_shots
-        , team_strength(special_teams=True)
+        , team_strength(special_teams=False)
         , flip
         , colors(cmap)
         , plot(cmap)
