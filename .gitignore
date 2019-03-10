@@ -36,3 +36,5 @@ demo/toy/model.png
 !pbp
 !peek
 !make
+!pbp/viz
+pbp/viz/shots.png

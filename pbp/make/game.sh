@@ -10,6 +10,10 @@ ocamlfind ocamlopt \
     -o game
 
 directory="../data"
-./game $directory"/game.json" $directory"/events.csv" $directory"/players.csv"
+./game \
+    $directory"/game.json" \
+    $directory"/game.csv" \
+    $directory"/events.csv" \
+    $directory"/players.csv"
 
 cd ../
