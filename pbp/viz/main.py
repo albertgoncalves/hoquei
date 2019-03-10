@@ -19,7 +19,7 @@ def colors(cmap):
     return f
 
 
-def rink(ax, home=True):
+def rink(ax):
     def away(goal):
         return \
             { "x": (goal["x"] * -1) - goal["length"]
@@ -28,8 +28,8 @@ def rink(ax, home=True):
             , "width": goal["width"]
             }
 
-    def draw_goal(ax, goal, alpha, home=True):
-        if home:
+    def draw_goal(ax, goal, alpha, right=True):
+        if right:
             x = goal["x"]
         else:
             goal = away(goal)
@@ -64,8 +64,8 @@ def rink(ax, home=True):
     ax.set_xticks([])
     ax.set_yticks([])
 
-    for home in [True, False]:
-        draw_goal(ax, goal, alpha=alpha, home=home)
+    for right in [True, False]:
+        draw_goal(ax, goal, alpha=alpha, right=right)
 
     draw_lines(ax, alpha=alpha)
     draw_circles(ax, alpha=alpha)
