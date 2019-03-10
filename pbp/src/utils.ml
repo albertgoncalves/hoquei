@@ -17,7 +17,7 @@ let take (n : int) (xs : 'a list) : 'a list =
     loop [] (xs, n)
 
 let finally (f : unit -> 'a) (resolve : unit -> 'b) : 'a =
-    let f_exception =
+    let f_exception : 'a =
         try f () with error ->
             resolve ();
             raise error in
@@ -27,7 +27,7 @@ let finally (f : unit -> 'a) (resolve : unit -> 'b) : 'a =
 let apply (f : unit -> unit) : unit = f ()
 
 let write_to_file (filename : string) (strings : string list) : unit =
-    let out_channel = open_out filename in
+    let out_channel : out_channel = open_out filename in
     finally
         (fun () -> L.iter (P.fprintf out_channel "%s\n") strings)
         (fun () -> close_out out_channel)
@@ -36,7 +36,7 @@ let print_option : (string option -> unit) = function
     | Some a -> print_endline a
     | None -> ()
 
-let try_option f =
+let try_option (f : unit -> 'a) : 'a option =
     try
         Some (f ())
     with _ ->

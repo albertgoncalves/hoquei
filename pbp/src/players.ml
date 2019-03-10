@@ -19,9 +19,9 @@ let all_players : (Y.json -> Y.json) = U.member "teams" @. U.member "boxscore"
 
 let extract (team_id : int) (team_name : string) (players : Y.json)
         (player_id : string) =
-    let player_json = players |> U.member player_id in
-    let person = player_json |> U.member "person" in
-    let position =
+    let player_json : Y.json = players |> U.member player_id in
+    let person : Y.json = player_json |> U.member "person" in
+    let position : string =
         player_json
         |> U.member "position"
         |> U.member "abbreviation"
@@ -35,13 +35,13 @@ let extract (team_id : int) (team_name : string) (players : Y.json)
     }
 
 let extract_all (json : Y.json) : player list =
-    let team_players json team =
-        let json = json |> U.member team in
-        let team_json = json |> U.member "team" in
-        let team_id = team_json |> U.member "id" |> U.to_int in
-        let team_name = team_json |> U.member "name" |> U.to_string in
-        let players = json |> U.member "players" in
-        let player_ids = players |> U.keys in
+    let team_players (json : Y.json) (team : string) : player list =
+        let json : Y.json = json |> U.member team in
+        let team_json : Y.json = json |> U.member "team" in
+        let team_id : int = team_json |> U.member "id" |> U.to_int in
+        let team_name : string = team_json |> U.member "name" |> U.to_string in
+        let players : Y.json = json |> U.member "players" in
+        let player_ids : string list = players |> U.keys in
         L.map (extract team_id team_name players) player_ids in
     L.map (team_players json) ["away"; "home"] |> L.flatten
 

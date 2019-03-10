@@ -35,7 +35,7 @@ let extract_shift (json : Y.json) : shift option =
             let access (field : string) : Y.json = json |> U.member field in
             let to_seconds (time : Y.json) : int =
                 time |> U.to_string_option |> J.clock_to_seconds in
-            let id =
+            let id : id =
                 { game_id = access "gameId" |> U.to_int
                 ; team_id = access "teamId" |> U.to_int
                 ; team_name = access "teamName" |> U.to_string
@@ -54,7 +54,8 @@ let shift_to_slices (shift : shift option) : shift_slice list =
     match shift with
         | None -> []
         | Some shift ->
-            let rec loop id period end_time xs = function
+            let rec loop (id : id) (period : int) (end_time : int)
+                    (xs : shift_slice list) : (int -> shift_slice list) = function
                 | 0 -> xs
                 | s ->
                     let x =

@@ -18,7 +18,7 @@ type game =
 
 let extract_team (season : int) (season_type : string) (venue : string)
         (json : Y.json) : game =
-    let team = json |> U.member venue in
+    let team : Y.json = json |> U.member venue in
     { season = season
     ; season_type = season_type
     ; team_id = team |> U.member "id" |> U.to_int
@@ -27,10 +27,11 @@ let extract_team (season : int) (season_type : string) (venue : string)
     }
 
 let extract (json : Y.json) : game list =
-    let game = json |> U.member "game" in
-    let season = game |> U.member "season" |> U.to_string |> int_of_string in
-    let season_type = game |> U.member "type" |> U.to_string in
-    let teams = json |> U.member "teams" in
+    let game : Y.json = json |> U.member "game" in
+    let season : int =
+        game |> U.member "season" |> U.to_string |> int_of_string in
+    let season_type : string = game |> U.member "type" |> U.to_string in
+    let teams : Y.json = json |> U.member "teams" in
     L.map
         (fun venue -> extract_team season season_type venue teams)
         ["away"; "home"]

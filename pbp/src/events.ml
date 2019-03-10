@@ -39,13 +39,13 @@ type event =
     }
 
 let extract_team (json : Y.json) : team =
-    let team_json = json |> U.member "team" in
+    let team_json : Y.json = json |> U.member "team" in
     { id = team_json |> U.member "id" |> U.to_int
     ; name = team_json |> U.member "name" |> U.to_string
     }
 
 let extract_player (json : Y.json) : player =
-    let player_json = json |> U.member "player" in
+    let player_json : Y.json = json |> U.member "player" in
     { id = player_json |> U.member "id" |> U.to_int
     ; name = player_json |> U.member "fullName" |> U.to_string
     ; result = json |> U.member "playerType" |> U.to_string
@@ -58,24 +58,24 @@ let extract_coordinates (json : Y.json) : coordinates =
     }
 
 let extract_score (json : Y.json) : score =
-    let score = json |> U.member "goals" in
+    let score : Y.json = json |> U.member "goals" in
     { away = score |> U.member "away" |> U.to_int
     ; home = score |> U.member "home" |> U.to_int
     }
 
 let extract (json : Y.json) : event =
-    let about = json |> U.member "about" in
-    let result =
+    let about : Y.json = json |> U.member "about" in
+    let result : string =
         json |> U.member "result" |> U.member "event" |> U.to_string in
-    let period = about |> U.member "period" |> U.to_int in
-    let second =
+    let period : int = about |> U.member "period" |> U.to_int in
+    let second : int =
         about
         |> U.member "periodTime"
         |> U.to_string_option
         |> J.clock_to_seconds in
-    let score = T.try_option (fun () -> extract_score about) in
-    let team = T.try_option (fun () -> extract_team json) in
-    let players =
+    let score : score option = T.try_option (fun () -> extract_score about) in
+    let team : team option = T.try_option (fun () -> extract_team json) in
+    let players : (player list) option =
         T.try_option
             begin
                 fun () ->
@@ -85,7 +85,8 @@ let extract (json : Y.json) : event =
                     |> L.map extract_player
 
             end in
-    let coordinates = T.try_option (fun () -> extract_coordinates json) in
+    let coordinates : coordinates option =
+        T.try_option (fun () -> extract_coordinates json) in
     { result = result
     ; period = period
     ; second = second
@@ -107,7 +108,7 @@ let players_to_string (players : player list) : string =
                     ; P.sprintf "\"result\": \"%s\"" player.result
                     ]
             end in
-    let players = L.map to_string players in
+    let players : string list = L.map to_string players in
     P.sprintf "[%s]" (S.concat "," players)
 
 let csv_header : string =
