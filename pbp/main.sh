@@ -17,3 +17,8 @@ done
 for f in shifts game; do
     bash $f.sh
 done
+
+cd ../viz/
+python main.py
+open shots.png
+cd ../

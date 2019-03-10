@@ -3,8 +3,8 @@
 set -e
 
 directory="../data"
-team_id="22"
-game_id="2018020875"
+team_id="14"
+game_id="2018020868"
 
 curl "https://statsapi.web.nhl.com/api/v1/schedule?teamId=$team_id&startDate=2018-10-01&endDate=2019-10-01" \
     > $directory/schedule.json
