@@ -19,7 +19,7 @@ def colors(cmap):
     return f
 
 
-def attack_left(goal):
+def invert(goal):
     return \
         { "x": (goal["x"] * -1) - goal["length"]
         , "y": goal["y"]
@@ -32,7 +32,7 @@ def draw_goal(ax, goal, alpha, attack="right"):
     if attack == "right":
         x = goal["x"]
     elif attack == "left":
-        goal = attack_left(goal)
+        goal = invert(goal)
         x = goal["x"] + goal["length"]
     else:
         error = \
