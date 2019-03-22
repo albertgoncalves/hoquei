@@ -20,5 +20,9 @@ done
 
 cd ../viz/
 python main.py
-open shots.png
+if [ $(uname -s) = "Darwin" ]; then
+    open shots.png
+else
+    xdg-open shots.png
+fi
 cd ../

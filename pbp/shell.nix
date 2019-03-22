@@ -21,6 +21,8 @@ with pkgs; mkShell {
         if [ $(uname -s) = "Darwin" ]; then
             alias ls='ls --color=auto'
             alias ll='ls -al'
+        else
+            alias open="xdg-open"
         fi
         alias csvlook="csvlook --no-inference -d ';'"
         alias sqlite3="rlwrap sqlite3 -header -csv -separator ';'"
