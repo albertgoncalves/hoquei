@@ -13,7 +13,7 @@ delimiter :: Char -> Bool
 delimiter x = (x == ',') || isSpace x
 
 index :: [a] -> [(Int, a)]
-index = zip [(0 :: Int) ..]
+index = zip [0 ..]
 
 filterTail :: (a -> Bool) -> [a] -> [a]
 filterTail _ [] = []
