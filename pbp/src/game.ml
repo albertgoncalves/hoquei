@@ -6,7 +6,7 @@ module U = Y.Util
 module P = Players
 module E = Events
 
-let (@.) = T.(@.)
+let (|.) = T.(|.)
 
 type game =
     { season : int
@@ -74,7 +74,10 @@ let main () =
         |> U.member "plays"
         |> U.member "allPlays"
         |> U.to_list
-        |> L.map ((fun event -> E.csv_row game_id event) @. E.extract) in
+        |> L.map begin
+            E.extract
+            |. E.csv_row game_id
+        end in
     let player_rows =
         live_data
         |> P.all_players

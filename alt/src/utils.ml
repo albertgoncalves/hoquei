@@ -2,7 +2,8 @@ module C = Char
 module L = List
 module S = String
 
-let (@.) (f : ('b -> 'c)) (g : ('a -> 'b)) : ('a -> 'c) = fun x -> f @@ g x
+let (@.) (f : ('b -> 'c)) (g : ('a -> 'b)) : ('a -> 'c) = fun x -> f (g x)
+let (|.) (f : ('a -> 'b)) (g : ('b -> 'c)) : ('a -> 'c) = fun x -> g (f x)
 
 let finally (f : unit -> 'a) (resolve : unit -> 'b) : 'a =
     let f_exception =

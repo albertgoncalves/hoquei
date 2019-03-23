@@ -4,9 +4,8 @@ set -e
 
 cd make/
 
-directory="../data/"
-if [ ! -d $directory ]; then
-    mkdir $directory
+if [ ! -d ../data/ ]; then
+    mkdir ../data/
     bash pull.sh
 fi
 

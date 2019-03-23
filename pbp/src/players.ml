@@ -4,7 +4,7 @@ module T = Utils
 module Y = Yojson.Basic
 module U = Y.Util
 
-let (@.) = T.(@.)
+let (|.) = T.(|.)
 
 type player =
     { team_id : int
@@ -15,7 +15,7 @@ type player =
     ; position : string
     }
 
-let all_players : (Y.json -> Y.json) = U.member "teams" @. U.member "boxscore"
+let all_players : (Y.json -> Y.json) = U.member "boxscore" |. U.member "teams"
 
 let extract (team_id : int) (team_name : string) (players : Y.json)
         (player_id : string) =

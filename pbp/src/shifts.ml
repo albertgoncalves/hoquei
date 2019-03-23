@@ -55,15 +55,16 @@ let shift_to_slices (shift : shift option) : shift_slice list =
         | None -> []
         | Some shift ->
             let rec loop (id : id) (period : int) (end_time : int)
-                    (xs : shift_slice list) : (int -> shift_slice list) = function
-                | 0 -> xs
-                | s ->
-                    let x =
-                        { id = id
-                        ; period = period
-                        ; second = end_time - s + 1
-                        } in
-                    loop id period end_time (x::xs) (s - 1) in
+                    (xs : shift_slice list) : (int -> shift_slice list) =
+                function
+                    | 0 -> xs
+                    | s ->
+                        let x =
+                            { id = id
+                            ; period = period
+                            ; second = end_time - s + 1
+                            } in
+                        loop id period end_time (x::xs) (s - 1) in
             loop shift.id shift.period shift.end_time [] shift.duration
 
 let csv_header : string =
