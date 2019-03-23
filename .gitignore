@@ -38,3 +38,4 @@ demo/toy/model.png
 !make
 !pbp/viz
 pbp/viz/shots.png
+!libsvm/
