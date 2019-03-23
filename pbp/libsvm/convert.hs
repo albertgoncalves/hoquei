@@ -1,16 +1,12 @@
 {-# OPTIONS_GHC -Wall #-}
 
-import Data.Char (isAlphaNum)
 import Data.Maybe (catMaybes)
-import Data.Text (pack, split, unpack)
+import Data.Text (pack, splitOn, unpack)
 import Text.Printf (printf)
 import Text.Read (readMaybe)
 
 (|.) :: (a -> b) -> (b -> c) -> (a -> c)
 f |. g = g . f
-
-delimiter :: Char -> Bool
-delimiter x = not $ isAlphaNum x || (x == '.')
 
 filterTail :: (a -> Bool) -> [a] -> [a]
 filterTail _ [] = []
@@ -23,11 +19,11 @@ format :: Int -> Float -> String
 format 0 = show . (round :: Float -> Int)
 format i = printf "%d:%f" i
 
-pipeline :: String -> String
-pipeline =
+pipeline :: String -> String -> String
+pipeline delimiter =
     filter (/= ' ')
     |. pack
-    |. split delimiter
+    |. splitOn (pack delimiter)
     |. map unpack
     |. map (readMaybe :: String -> Maybe Float)
     |. zip [(0 :: Int) ..]
@@ -45,4 +41,4 @@ process f =
     |. unlines
 
 main :: IO ()
-main = interact $ process pipeline
+main = interact $ process (pipeline ",")

@@ -4,7 +4,9 @@ with pkgs; mkShell {
     buildInputs = [
         (haskell.packages.ghc843.ghcWithPackages (pkgs: [
             ghc
-            hlint
+            pkgs.hlint
+            pkgs.hindent
+            pkgs.optparse-generic
         ]))
         libiconv
     ] ++ (with python36Packages; [
