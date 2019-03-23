@@ -3,9 +3,6 @@ module P = Printf
 
 exception Value of string
 
-(*
-let (@.) (f : 'b -> 'c) (g : 'a -> 'b) : ('a -> 'c) = fun x -> f (g x)
-*)
 let (|.) (f : 'a -> 'b) (g : 'b -> 'c) : ('a -> 'c) = fun x -> g (f x)
 
 let rec last : ('a list -> 'a) = function
