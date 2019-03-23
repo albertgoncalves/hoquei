@@ -13,7 +13,7 @@ split :: Char -> String -> [String]
 split d x = f (reverse x) [] []
   where
     f [] y ys = y : ys
-    f (x':xs) y ys
+    f (x' : xs) y ys
         | (x' == d) || isSpace x' =
             case y of
                 "" -> f xs [] ys
