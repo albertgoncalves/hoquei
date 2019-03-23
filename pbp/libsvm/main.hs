@@ -42,8 +42,8 @@ pipeline =
     |. map (uncurry sparse)
     |. unwords
 
-beforeAfter :: String -> IO ()
-beforeAfter x = mapM_ print [x, pipeline x]
-
 main :: IO ()
-main = beforeAfter "0 1.01, 0.0001,\n2,0.0,0.0000000000000, 10.99"
+main =
+    "0\t1.01,\t0.0001,\t2,\t0.0,\t0.0000000000000,\t10.99"
+    |> (\x -> unlines [x, pipeline x])
+    |> putStr
