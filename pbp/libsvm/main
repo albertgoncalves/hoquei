@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-f="main.hs"
+f="convert.hs"
 x=$(hlint -c=never $f)
 y=$?
 if [[ ! $x = "No hints" ]]; then
     echo $x
 fi
 if [ $y = 0 ]; then
-    echo $1 | runghc $f
+    cat $1 | runghc $f
 fi
