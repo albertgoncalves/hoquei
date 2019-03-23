@@ -7,5 +7,5 @@ if [[ ! $x = "No hints" ]]; then
     echo $x
 fi
 if [ $y = 0 ]; then
-    runghc $f <<< $1
+    echo $1 | runghc $f
 fi
