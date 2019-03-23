@@ -2,24 +2,27 @@
 
 import Text.ParserCombinators.ReadP
 
+(|.) :: (a -> b) -> (b -> c) -> (a -> c)
+f |. g = g . f
+
 scalpel :: ReadP String
 scalpel = do
-    skip '>'
+    f '>'
     text <- many1 $ satisfy (`notElem` "><")
-    skip '<'
+    f '<'
     return text
   where
-    skip = skipMany1 . satisfy . (==)
+    f = skipMany1 . satisfy . (==)
 
 extract :: [(String, a)] -> [String]
 extract [(s, _)] = [s]
 extract _ = []
 
 surgery :: String -> [String]
-surgery s =
-    concatMap
-        (extract . readP_to_S scalpel)
-        (takeWhile (/= "") $ iterate tail s)
+surgery = f |. concatMap g
+  where
+    f = takeWhile (/= "") . iterate tail
+    g = extract . readP_to_S scalpel
 
 excerpt :: String
 excerpt =
