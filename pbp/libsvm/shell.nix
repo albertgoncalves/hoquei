@@ -6,7 +6,6 @@ with pkgs; mkShell {
             ghc
             hlint
         ]))
-        # haskellPackages.hlint
         libiconv
     ];
     shellHook = ''
