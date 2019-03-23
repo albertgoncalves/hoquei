@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-import Data.Char (isSpace)
+import Data.Char (isDigit)
 import Data.Maybe (catMaybes)
 import Data.Text (pack, split, unpack)
 import Text.Printf (printf)
@@ -10,7 +10,7 @@ import Text.Read (readMaybe)
 f |. g = g . f
 
 delimiter :: Char -> Bool
-delimiter x = (x == ',') || isSpace x
+delimiter x = not $ isDigit x || (x == '.')
 
 index :: [a] -> [(Int, a)]
 index = zip [0 ..]
