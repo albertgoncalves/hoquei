@@ -22,10 +22,6 @@ split d x = f (reverse x) [] []
                 y' -> f xs [] (y' : ys)
         | otherwise = f xs (x' : y) ys
 
-unwrap :: (a, Maybe b) -> Maybe (a, b)
-unwrap (a, Just b) = Just (a, b)
-unwrap (_, Nothing) = Nothing
-
 filterTail :: (a -> Bool) -> [a] -> [a]
 filterTail _ [] = []
 filterTail f (x : xs) = x : filter f xs
@@ -39,7 +35,7 @@ pipeline =
     split ','
     |. map (readMaybe :: String -> Maybe Float)
     |. zip [(0 :: Int) ..]
-    |. map unwrap
+    |. map sequence
     |. catMaybes
     |. filterTail (\(_, x) -> x /= 0)
     |. map (uncurry sparse)
