@@ -26,9 +26,9 @@ filterTail :: (a -> Bool) -> [a] -> [a]
 filterTail _ [] = []
 filterTail f (x : xs) = x : filter f xs
 
-sparse :: Int -> Float -> String
-sparse 0 x = x |> (round :: Float -> Int) |> show
-sparse i x = printf "%d:%f" i x
+format :: Int -> Float -> String
+format 0 = show . (round :: Float -> Int)
+format i = printf "%d:%f" i
 
 pipeline :: String -> String
 pipeline =
@@ -38,7 +38,7 @@ pipeline =
     |. map sequence
     |. catMaybes
     |. filterTail (\(_, x) -> x /= 0)
-    |. map (uncurry sparse)
+    |. map (uncurry format)
     |. unwords
 
 main :: IO ()
