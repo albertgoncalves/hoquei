@@ -1,7 +1,9 @@
 {-# OPTIONS_GHC -Wall #-}
 
 import Data.Char (isSpace)
+import Data.Maybe (catMaybes)
 import Text.Printf (printf)
+import Text.Read (readMaybe)
 
 (|.) :: (a -> b) -> (b -> c) -> (a -> c)
 f |. g = g . f
@@ -20,30 +22,28 @@ split d x = f (reverse x) [] []
                 y' -> f xs [] (y' : ys)
         | otherwise = f xs (x' : y) ys
 
-sparse :: Int -> Float -> String
-sparse 0 x = x |> round' |> show
-  where
-    round' :: Float -> Int
-    round' = round
-sparse i x = printf "%d:%f" i x
+unwrap :: (a, Maybe b) -> Maybe (a, b)
+unwrap (a, Just b) = Just (a, b)
+unwrap (_, Nothing) = Nothing
 
 filterTail :: (a -> Bool) -> [a] -> [a]
-filterTail f xs = h : filter f t
-  where
-    h = head xs
-    t = tail xs
+filterTail _ [] = []
+filterTail f (x : xs) = x : filter f xs
+
+sparse :: Int -> Float -> String
+sparse 0 x = x |> (round :: Float -> Int) |> show
+sparse i x = printf "%d:%f" i x
 
 pipeline :: String -> String
 pipeline =
     split ','
-    |. map read
+    |. map (readMaybe :: String -> Maybe Float)
     |. zip [(0 :: Int) ..]
+    |. map unwrap
+    |. catMaybes
     |. filterTail (\(_, x) -> x /= 0)
     |. map (uncurry sparse)
     |. unwords
 
 main :: IO ()
-main =
-    "0\t1.01,\t0.0001,\t2,\t0.0,\t0.0000000000000,\t10.99"
-    |> (\x -> unlines [x, pipeline x])
-    |> putStr
+main = interact pipeline
