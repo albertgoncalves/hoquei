@@ -53,15 +53,15 @@ printUsage = do
             , "output: stdout"
             ]
 
-parseStdin :: String -> IO a
-parseStdin delimiter = do
+processStdin :: String -> IO a
+processStdin delimiter = do
     getContents >>= putStr . mapLines (convert delimiter)
     exitSuccess
 
 parseArgs :: [String] -> IO a
 parseArgs ["-d"] = printUsage
-parseArgs ["-d", delimiter] = parseStdin delimiter
-parseArgs [] = parseStdin ","
+parseArgs ["-d", delimiter] = processStdin delimiter
+parseArgs [] = processStdin ","
 parseArgs _ = printUsage
 
 main :: IO ()
