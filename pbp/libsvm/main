@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
 
-f="src/csv2svm.hs"
-x=$(hlint -c=never $f)
+f="src/csv2svm"
+x=$(hlint -c=never "$f.hs")
 y=$?
 if [[ ! $x = "No hints" ]]; then
     echo $x
 fi
 if [ $y = 0 ]; then
-    cat $1 | runghc $f
+    ghc "$f.hs"
+    if [ ! -z $1 ]; then
+        if [ ! -z $2 ]; then
+            cat $1 | ./$f -d $2
+        else
+            cat $1 | ./$f
+        fi
+    fi
 fi
