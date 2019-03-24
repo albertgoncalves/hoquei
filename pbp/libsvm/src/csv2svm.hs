@@ -21,8 +21,8 @@ format :: Int -> Float -> String
 format 0 = show . (round :: Float -> Int)
 format i = printf "%d:%f" i
 
-pipeline :: String -> String -> String
-pipeline delimiter =
+convert :: String -> String -> String
+convert delimiter =
     pack
     |. splitOn (pack delimiter)
     |. map unpack
@@ -34,15 +34,15 @@ pipeline delimiter =
     |. map (uncurry format)
     |. unwords
 
-process :: (String -> String) -> String -> String
-process f =
+mapLines :: (String -> String) -> String -> String
+mapLines f =
     lines
     |. map f
     |. filter (/= "")
     |. unlines
 
-halt :: IO a
-halt = do
+printUsage :: IO a
+printUsage = do
     putStr message
     exitWith (ExitFailure 1)
   where
@@ -53,16 +53,16 @@ halt = do
             , "output: stdout"
             ]
 
-run :: String -> IO a
-run delimiter = do
-    getContents >>= putStr . process (pipeline delimiter)
+parseStdin :: String -> IO a
+parseStdin delimiter = do
+    getContents >>= putStr . mapLines (convert delimiter)
     exitSuccess
 
-parse :: [String] -> IO a
-parse ["-d"] = halt
-parse ["-d", delimiter] = run delimiter
-parse [] = run ","
-parse _ = halt
+parseArgs :: [String] -> IO a
+parseArgs ["-d"] = printUsage
+parseArgs ["-d", delimiter] = parseStdin delimiter
+parseArgs [] = parseStdin ","
+parseArgs _ = printUsage
 
 main :: IO ()
-main = getArgs >>= parse
+main = getArgs >>= parseArgs
