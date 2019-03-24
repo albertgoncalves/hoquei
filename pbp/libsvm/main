@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-f="convert.hs"
+f="src/csv2svm.hs"
 x=$(hlint -c=never $f)
 y=$?
 if [[ ! $x = "No hints" ]]; then

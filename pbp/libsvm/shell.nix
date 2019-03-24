@@ -6,7 +6,6 @@ with pkgs; mkShell {
             ghc
             pkgs.hlint
             pkgs.hindent
-            pkgs.optparse-generic
         ]))
         libiconv
     ] ++ (with python36Packages; [

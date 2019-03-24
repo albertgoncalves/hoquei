@@ -4,6 +4,8 @@ import Data.Maybe (catMaybes)
 import Data.Text (pack, splitOn, unpack)
 import Text.Printf (printf)
 import Text.Read (readMaybe)
+import System.Environment (getArgs)
+import System.Exit (ExitCode(ExitFailure), exitSuccess, exitWith)
 
 (|.) :: (a -> b) -> (b -> c) -> (a -> c)
 f |. g = g . f
@@ -21,8 +23,7 @@ format i = printf "%d:%f" i
 
 pipeline :: String -> String -> String
 pipeline delimiter =
-    filter (/= ' ')
-    |. pack
+    pack
     |. splitOn (pack delimiter)
     |. map unpack
     |. map (readMaybe :: String -> Maybe Float)
@@ -40,5 +41,28 @@ process f =
     |. filter (/= "")
     |. unlines
 
+halt :: IO a
+halt = do
+    putStr message
+    exitWith (ExitFailure 1)
+  where
+    message =
+        unlines
+            [ "usage: convert [-d DELIMITER]"
+            , "input: stdin"
+            , "output: stdout"
+            ]
+
+run :: String -> IO a
+run delimiter = do
+    getContents >>= putStr . process (pipeline delimiter)
+    exitSuccess
+
+parse :: [String] -> IO a
+parse ["-d"] = halt
+parse ["-d", delimiter] = run delimiter
+parse [] = run ","
+parse _ = halt
+
 main :: IO ()
-main = interact $ process (pipeline ",")
+main = getArgs >>= parse
