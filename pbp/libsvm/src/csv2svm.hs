@@ -25,8 +25,7 @@ convert :: String -> String -> String
 convert delimiter =
     pack
     |. splitOn (pack delimiter)
-    |. map unpack
-    |. map (readMaybe :: String -> Maybe Float)
+    |. map ((readMaybe :: String -> Maybe Float) . unpack)
     |. zip [(0 :: Int) ..]
     |. map sequence
     |. catMaybes
@@ -42,9 +41,7 @@ mapLines f =
     |. unlines
 
 printUsage :: IO a
-printUsage = do
-    putStr message
-    exitWith (ExitFailure 1)
+printUsage = putStr message >> exitWith (ExitFailure 1)
   where
     message =
         unlines
@@ -54,9 +51,10 @@ printUsage = do
             ]
 
 processStdin :: String -> IO a
-processStdin delimiter = do
-    getContents >>= putStr . mapLines (convert delimiter)
-    exitSuccess
+processStdin delimiter =
+    getContents
+    >>= putStr . mapLines (convert delimiter)
+    >> exitSuccess
 
 parseArgs :: [String] -> IO a
 parseArgs ["-d"] = printUsage
