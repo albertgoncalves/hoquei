@@ -2,8 +2,7 @@
 with pkgs; mkShell {
     name = "Haskell";
     buildInputs = [
-        (haskell.packages.ghc844.ghcWithPackages (pkgs: [
-            ghc
+        (haskell.packages.ghc864.ghcWithPackages (pkgs: [
             pkgs.hlint
             pkgs.hindent
         ]))
