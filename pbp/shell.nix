@@ -9,16 +9,17 @@ with pkgs; mkShell {
             ocp-indent
             utop
         ])
-        (python36.withPackages(ps: with ps; [
+        (python37.withPackages(ps: with ps; [
             pandas
-            csvkit
             matplotlib
             flake8
         ]))
         jq
         sqlite
         rlwrap
-    ];
+    ] ++ (with python36Packages; [
+        (csvkit.overridePythonAttrs (oldAttrs: {checkPhase = "true";}))
+    ]);
     shellHook = ''
         if [ $(uname -s) = "Darwin" ]; then
             alias ls='ls --color=auto'
