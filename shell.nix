@@ -1,16 +1,20 @@
 { pkgs ? import <nixpkgs> {} }:
 with pkgs; mkShell {
     name = "Python";
-    buildInputs = [ python36
-                    python36Packages.selenium
-                    python36Packages.csvkit
-                    python36Packages.pandas
-                    python36Packages.matplotlib
-                    python36Packages.numpy
-                    python36Packages.flake8
-                    fzf
-                    wget
-                  ];
+    buildInputs = [
+        (python37.withPackages(ps: with ps; [
+            selenium
+            matplotlib
+            numpy
+            flake8
+            pandas
+            # csvkit
+        ]))
+        fzf
+        wget
+    ] ++ (with python36Packages; [
+        (csvkit.overridePythonAttrs (oldAttrs: {checkPhase = "true";}))
+    ]);
     shellHook = ''
         if [ $(uname -s) = "Darwin" ]; then
             os="mac"
