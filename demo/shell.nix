@@ -1,12 +1,16 @@
 { pkgs ? import <nixpkgs> {} }:
 with pkgs; mkShell {
     name = "R";
-    buildInputs = [ R
-                    rPackages.lintr
-                    glibcLocales
-                    gawk
-                    python36Packages.csvkit
-                  ];
+    buildInputs = [
+        glibcLocales
+        (with rPackages; [
+            R
+            # lintr
+        ])
+        gawk
+    ] ++ (with python36Packages; [
+        (csvkit.overridePythonAttrs (oldAttrs: {checkPhase = "true";}))
+    ]);
     shellHook = ''
         if [ $(uname -s) = "Darwin" ]; then
             alias ls='ls --color=auto'

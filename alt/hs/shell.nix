@@ -2,12 +2,11 @@
 with pkgs; mkShell {
     name = "Haskell";
     buildInputs = [
-        (haskell.packages.ghc843.ghcWithPackages (pkgs: [
-            ghc
+        (haskell.packages.ghc864.ghcWithPackages (pkgs: [
+            hlint
         ]))
-        haskellPackages.hlint
-        haskellPackages.hindent
         libiconv
+        haskellPackages.hindent
     ];
     shellHook = ''
         if [ $(uname -s) = "Darwin" ]; then
