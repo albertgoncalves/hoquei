@@ -6,7 +6,6 @@ with pkgs; mkShell {
             hlint
         ]))
         libiconv
-        haskellPackages.hindent
     ];
     shellHook = ''
         if [ $(uname -s) = "Darwin" ]; then
@@ -14,6 +13,5 @@ with pkgs; mkShell {
             alias ll='ls -al'
         fi
         alias hlint="hlint -c=never"
-        alias hindent="hindent --indent-size 4 --sort-imports --line-length 79"
     '';
 }
