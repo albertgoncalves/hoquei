@@ -18,7 +18,7 @@ sparse :: (a, Float) -> Bool
 sparse (_, x) = x /= 0
 
 format :: Int -> Float -> String
-format 0 = show . (round :: Float -> Int)
+format 0 = show . (truncate :: Float -> Int)
 format i = printf "%d:%f" i
 
 convert :: String -> String -> String
@@ -34,13 +34,9 @@ convert delimiter =
     |. unwords
 
 mapLines :: (String -> String) -> String -> String
-mapLines f =
-    lines
-    |. map f
-    |. filter (/= "")
-    |. unlines
+mapLines f = unlines . filter (/= "") . map f . lines
 
-printUsage :: IO a
+printUsage :: IO ()
 printUsage = putStr message >> exitWith (ExitFailure 1)
   where
     message =
@@ -50,13 +46,11 @@ printUsage = putStr message >> exitWith (ExitFailure 1)
             , "output: stdout"
             ]
 
-processStdin :: String -> IO a
+processStdin :: String -> IO ()
 processStdin delimiter =
-    getContents
-    >>= putStr . mapLines (convert delimiter)
-    >> exitSuccess
+    getContents >>= putStr . mapLines (convert delimiter) >> exitSuccess
 
-parseArgs :: [String] -> IO a
+parseArgs :: [String] -> IO ()
 parseArgs ["-d"] = printUsage
 parseArgs ["-d", delimiter] = processStdin delimiter
 parseArgs [] = processStdin ","
