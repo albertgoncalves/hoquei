@@ -15,7 +15,7 @@ filterTail _ [] = []
 filterTail f (x : xs) = x : filter f xs
 
 sparse :: (a, Float) -> Bool
-sparse (_, x) = x /= 0
+sparse = (/= 0) . snd
 
 format :: Int -> Float -> String
 format 0 = show . (truncate :: Float -> Int)
